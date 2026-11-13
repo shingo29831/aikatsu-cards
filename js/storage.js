@@ -394,12 +394,4 @@
   global.AikatsuCardStorage = {
     CardStorageService
   };
-})(window);
-
-
-  const IDB_CONFIG = {
-    NAME: 'aikatsu_encore_card_db',
-    VERSION: 1,
-    STORE_OWNED: 'owned_cards',
-    STORE_KV: 'app_kv'
-  };
+})(typeof window !== 'undefined' ? window : globalThis);
