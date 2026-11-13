@@ -1,0 +1,314 @@
+/* Module: @role: カード詳細モーダル、表裏フリップ表示、データ管理モーダル、およびモバイル向けレスポンシブスタイル定義 */
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 18, 38, 0.72);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-dialog {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  max-width: 760px;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 24px;
+  position: relative;
+  box-shadow: var(--shadow-md);
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f2eaf0;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.card-modal-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.flip-container {
+  position: relative;
+  background: #f6f0f5;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flip-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.flip-face--back {
+  display: none;
+}
+
+.flip-container.is-flipped .flip-face--front {
+  display: none;
+}
+
+.flip-container.is-flipped .flip-face--back {
+  display: flex;
+}
+
+.face-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.card-modal-img {
+  max-width: 100%;
+  max-height: 380px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-modal-visual-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-flip {
+  background: var(--pink-primary);
+  color: #fff;
+  flex: 1;
+}
+
+.btn-nav {
+  background: #f0e8ee;
+  color: var(--text-main);
+}
+
+.card-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.btn-fav-large {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.btn-fav-large.is-active {
+  color: var(--gold-accent);
+}
+
+.card-modal-title {
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+}
+
+.card-spec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.card-spec-item {
+  display: grid;
+  grid-template-columns: 95px 1fr;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f2e8f0;
+  padding-bottom: 6px;
+}
+
+.card-spec-item dt {
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.card-modal-ownership {
+  background: var(--pink-light);
+  padding: 14px;
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ownership-label {
+  font-weight: 700;
+}
+
+/* Data Modal */
+.modal-title {
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+}
+
+.data-modal-section {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.data-modal-section h3 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.data-help {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.file-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.advanced-details {
+  margin-top: 10px;
+  background: #faf6f9;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.advanced-details summary {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+  cursor: pointer;
+  user-select: none;
+}
+
+.advanced-details__body {
+  margin-top: 10px;
+}
+
+.json-textarea {
+  width: 100%;
+  font-family: monospace;
+  font-size: 0.82rem;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: #fff;
+}
+
+.status-message {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+}
+
+@media (max-width: 768px) {
+  .app-wrapper {
+    padding: 10px;
+  }
+  .app-header {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .header-inner {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .app-title {
+    font-size: 1.2rem;
+  }
+  .header-actions {
+    gap: 6px;
+  }
+  .header-actions .btn {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+  .stats-dashboard {
+    gap: 8px;
+  }
+  .stat-card {
+    padding: 10px;
+    column-gap: 8px;
+    row-gap: 6px;
+    grid-template-areas:
+      "gauge head"
+      "foot  foot";
+  }
+  .circular-gauge {
+    width: 48px;
+    height: 48px;
+  }
+  .stat-rate {
+    font-size: 0.7rem;
+  }
+  .stat-head {
+    align-self: center;
+  }
+  .stat-label {
+    font-size: 0.76rem;
+  }
+  .stat-foot {
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.73rem;
+    line-height: 1.3;
+  }
+  .search-panel {
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .search-row--top,
+  .search-row--options,
+  .card-modal-content {
+    grid-template-columns: 1fr;
+  }
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 350px) {
+  .stats-dashboard {
+    grid-template-columns: 1fr;
+  }
+  .stat-card {
+    grid-template-areas:
+      "gauge head"
+      "gauge foot";
+  }
+}
