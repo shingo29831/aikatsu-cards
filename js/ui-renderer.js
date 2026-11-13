@@ -27,10 +27,13 @@
     if (!fillEl) return;
     const clamped = Math.max(0, Math.min(100, Number.isFinite(rate) ? rate : 0));
     const formatted = clamped.toFixed(1);
+    // 低コンプ率(数%未満)でもゲージの色を視認可能にし、2値dasharrayでブラウザ差異を防ぐ
+    const visualRate = clamped > 0 ? Math.min(100, Math.max(clamped, 5)) : 0;
     const radius = parseFloat(fillEl.getAttribute && fillEl.getAttribute('r')) || 15.9155;
     const circumference = 2 * Math.PI * radius;
-    const dashArrayValue = circumference.toFixed(4);
-    const dashOffsetValue = (circumference * (1 - clamped / 100)).toFixed(4);
+    const circumferenceValue = circumference.toFixed(4);
+    const dashArrayValue = `${circumferenceValue} ${circumferenceValue}`;
+    const dashOffsetValue = (circumference * (1 - visualRate / 100)).toFixed(4);
     const isSub =
       fillEl.id === 'statFilteredProgressFill' ||
       Boolean(fillEl.closest && fillEl.closest('.circular-gauge--sub'));
