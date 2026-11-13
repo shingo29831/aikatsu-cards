@@ -91,8 +91,13 @@
 
     _setSyncBadge(text, state) {
       if (!this.el.syncStatusBadge) return;
-      this.el.syncStatusBadge.textContent = text;
-      this.el.syncStatusBadge.dataset.state = state || 'info';
+      const validStates = ['info', 'loading', 'success', 'warn', 'custom'];
+      const normalizedState = validStates.includes(state) ? state : 'info';
+      const message = text || '';
+      // textContentを上書きすると内包SVGアイコンが消えるため属性のみ更新する
+      this.el.syncStatusBadge.dataset.state = normalizedState;
+      this.el.syncStatusBadge.setAttribute('aria-label', message);
+      this.el.syncStatusBadge.title = message;
     }
 
     _initResponsiveSearchState() {

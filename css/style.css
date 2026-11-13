@@ -95,13 +95,42 @@ body {
 .sync-badge {
   display: inline-flex;
   align-items: center;
-  font-size: 0.74rem;
-  font-weight: 700;
-  padding: 3px 10px;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  flex-shrink: 0;
   border-radius: 999px;
   background: #f5eef7;
   color: var(--text-muted);
   border: 1px solid #ead7e8;
+}
+
+.sync-badge__icon {
+  display: none;
+  width: 15px;
+  height: 15px;
+}
+
+@keyframes syncBadgeSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sync-badge[data-state="info"] .sync-badge__icon--loading,
+.sync-badge[data-state="loading"] .sync-badge__icon--loading {
+  display: block;
+  animation: syncBadgeSpin 0.85s linear infinite;
+}
+
+.sync-badge[data-state="success"] .sync-badge__icon--check,
+.sync-badge[data-state="custom"] .sync-badge__icon--check {
+  display: block;
+}
+
+.sync-badge[data-state="warn"] .sync-badge__icon--warn {
+  display: block;
 }
 
 .sync-badge[data-state="loading"] {
@@ -358,12 +387,12 @@ body {
     justify-content: flex-start;
   }
   .sync-badge {
-    font-size: 0.66rem;
-    padding: 2px 7px;
-    max-width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 24px;
+    height: 24px;
+  }
+  .sync-badge__icon {
+    width: 13px;
+    height: 13px;
   }
   .header-actions .btn {
     padding: 3px 8px;

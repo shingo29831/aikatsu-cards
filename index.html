@@ -17,7 +17,19 @@
           <h1 class="app-title">アイカツ！カード管理</h1>
         </div>
         <div class="header-actions">
-          <span id="syncStatusBadge" class="sync-badge" data-state="info">準備中...</span>
+          <span id="syncStatusBadge" class="sync-badge" data-state="info" role="status" aria-label="準備中..." title="準備中...">
+            <svg class="sync-badge__icon sync-badge__icon--loading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="8.5" stroke-opacity="0.25"></circle>
+              <path d="M12 3.5a8.5 8.5 0 0 1 8.5 8.5"></path>
+            </svg>
+            <svg class="sync-badge__icon sync-badge__icon--check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12.5l4.5 4.5L19 7.5"></path>
+            </svg>
+            <svg class="sync-badge__icon sync-badge__icon--warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 7v6"></path>
+              <circle cx="12" cy="16.5" r="1" fill="currentColor" stroke="none"></circle>
+            </svg>
+          </span>
           <button type="button" id="btnSyncOfficial" class="btn btn-outline">↻ カード更新</button>
           <button type="button" id="btnQuickExportOwned" class="btn btn-outline">保存</button>
           <label class="btn btn-outline file-label">
