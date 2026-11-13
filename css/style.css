@@ -149,6 +149,7 @@ body {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  width: 100%;
 }
 
 .stat-card {
@@ -156,8 +157,9 @@ body {
   border: 1.5px solid #cdd9f7;
   border-radius: var(--radius-md);
   padding: 8px 12px;
+  min-width: 0;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   grid-template-areas:
     "gauge head"
     "gauge foot";
@@ -217,6 +219,7 @@ body {
 
 .stat-head {
   grid-area: head;
+  min-width: 0;
   display: flex;
   align-items: center;
   align-self: end;
@@ -254,6 +257,7 @@ body {
 
 .stat-foot {
   grid-area: foot;
+  min-width: 0;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
