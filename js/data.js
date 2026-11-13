@@ -4,8 +4,25 @@
 (function (global) {
   'use strict';
 
+  function ensureModule(globalKey, requirePath) {
+    if (global[globalKey]) return global[globalKey];
+    if (typeof require === 'function') {
+      try {
+        require(requirePath);
+      } catch (_e) {
+        // ブラウザ環境ではscriptタグ経由で解決
+      }
+    }
+    return global[globalKey] || {};
+  }
+
+  const catalogModule = ensureModule('AikatsuCatalogData', './catalog-data.js');
+  const syncModule = ensureModule('AikatsuOfficialSync', './official-sync.js');
+
   const OFFICIAL_CARDLIST_URL =
+    syncModule.OFFICIAL_CARDLIST_URL || 'https://dcd.aikatsu.com/encore/cardlist/?search=true';
   const OFFICIAL_CARDLIST_BASE =
+    syncModule.OFFICIAL_CARDLIST_BASE || 'https://dcd.aikatsu.com/encore/cardlist/';
   const LOCAL_CATALOG_PATH = syncModule.LOCAL_CATALOG_PATH || 'data/cards.json';
 
   /** 公式HTMLの .cardModal__infoTxt から抽出したプロモカード入手方法マップ */
@@ -439,17 +456,4 @@
     fetchLocalCatalogJson,
     loadOfficialAndCatalogCards
   };
-})(window);
-
-
-  function ensureModule(globalKey, requirePath) {
-    if (global[globalKey]) return global[globalKey];
-    if (typeof require === 'function') {
-      try {
-        require(requirePath);
-      } catch (_e) {
-        // ブラウザ環境ではscriptタグ経由で解決
-      }
-    }
-    return global[globalKey] || {};
-  }
+})(typeof window !== 'undefined' ? window : globalThis);

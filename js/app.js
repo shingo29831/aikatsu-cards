@@ -4,6 +4,22 @@
 (function (global) {
   'use strict';
 
+  function ensureModule(globalKey, requirePath) {
+    if (global[globalKey]) return global[globalKey];
+    if (typeof require === 'function') {
+      try {
+        require(requirePath);
+      } catch (_e) {
+        // ブラウザ環境ではscriptタグ経由で解決
+      }
+    }
+    return global[globalKey] || {};
+  }
+
+  const filterModule = ensureModule('AikatsuCardFilter', './card-filter.js');
+  const uiRenderer = ensureModule('AikatsuUiRenderer', './ui-renderer.js');
+  const modalController = ensureModule('AikatsuModalController', './modal-controller.js');
+
   const RARITY_ORDER = { N: 1, R: 2, PR: 3, ER: 4 };
 
   class AikatsuCardApp {
@@ -343,22 +359,11 @@
 
   global.AikatsuCardApp = AikatsuCardApp;
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const storage = new global.AikatsuCardStorage.CardStorageService();
-    const app = new AikatsuCardApp(global.AikatsuCardData, storage);
-    app.init();
-  });
-})(window);
-
-
-  function ensureModule(globalKey, requirePath) {
-    if (global[globalKey]) return global[globalKey];
-    if (typeof require === 'function') {
-      try {
-        require(requirePath);
-      } catch (_e) {
-        // ブラウザ環境ではscriptタグ経由で解決
-      }
-    }
-    return global[globalKey] || {};
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+      const storage = new global.AikatsuCardStorage.CardStorageService();
+      const app = new AikatsuCardApp(global.AikatsuCardData, storage);
+      app.init();
+    });
   }
+})(typeof window !== 'undefined' ? window : globalThis);

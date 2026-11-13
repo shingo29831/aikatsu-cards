@@ -27,12 +27,52 @@
     if (!fillEl) return;
     const clamped = Math.max(0, Math.min(100, Number.isFinite(rate) ? rate : 0));
     const formatted = clamped.toFixed(1);
-    fillEl.setAttribute('stroke-dasharray', `${formatted}, 100`);
-    fillEl.style.strokeDasharray = `${formatted}, 100`;
-    // 0%時にstroke-linecap:roundの始点ドットが残るのを防ぐ
-    fillEl.style.opacity = clamped > 0 ? '1' : '0';
-    fillEl.style.width = `${formatted}%`;
-    const gaugeWrap = fillEl.closest('[role="progressbar"]');
+    const dashValue = `${formatted}, 100`;
+    const isSub =
+      fillEl.id === 'statFilteredProgressFill' ||
+      Boolean(fillEl.closest && fillEl.closest('.circular-gauge--sub'));
+    const strokeColor = isSub ? '#6a89cc' : '#ff4fa3';
+
+    fillEl.setAttribute('fill', 'none');
+    fillEl.setAttribute('stroke', strokeColor);
+    fillEl.setAttribute('stroke-width', '3.6');
+    fillEl.setAttribute('stroke-linecap', 'round');
+    fillEl.setAttribute('stroke-dasharray', dashValue);
+
+    if (fillEl.style) {
+      fillEl.style.fill = 'none';
+      fillEl.style.stroke = strokeColor;
+      fillEl.style.strokeWidth = '3.6';
+      fillEl.style.strokeLinecap = 'round';
+      fillEl.style.strokeDasharray = dashValue;
+      // 0%時にstroke-linecap:roundの始点ドットが残るのを防ぐ
+      fillEl.style.opacity = clamped > 0 ? '1' : '0';
+      if (!fillEl.tagName || fillEl.tagName.toLowerCase() !== 'circle') {
+        fillEl.style.width = `${formatted}%`;
+      }
+    }
+
+    const svgEl = fillEl.closest ? fillEl.closest('svg') : null;
+    if (svgEl) {
+      svgEl.setAttribute('width', '62');
+      svgEl.setAttribute('height', '62');
+      if (svgEl.style) {
+        svgEl.style.transform = 'rotate(-90deg)';
+      }
+      const trackEl = svgEl.querySelector('.circular-gauge__track');
+      if (trackEl) {
+        trackEl.setAttribute('fill', 'none');
+        trackEl.setAttribute('stroke', '#e9dce6');
+        trackEl.setAttribute('stroke-width', '3.6');
+        if (trackEl.style) {
+          trackEl.style.fill = 'none';
+          trackEl.style.stroke = '#e9dce6';
+          trackEl.style.strokeWidth = '3.6';
+        }
+      }
+    }
+
+    const gaugeWrap = fillEl.closest ? fillEl.closest('[role="progressbar"]') : null;
     if (gaugeWrap) {
       gaugeWrap.setAttribute('aria-valuenow', formatted);
     }

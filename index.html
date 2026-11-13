@@ -31,15 +31,9 @@
       <section class="stats-dashboard" aria-label="コレクション統計">
         <div class="stat-card stat-card--primary">
           <div class="circular-gauge" role="progressbar" aria-label="全体のコンプリート率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <svg class="circular-gauge__svg" viewBox="0 0 36 36" aria-hidden="true">
-              <defs>
-                <linearGradient id="gradPrimaryGauge" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#ff4fa3" />
-                  <stop offset="100%" stop-color="#f6b93b" />
-                </linearGradient>
-              </defs>
-              <circle class="circular-gauge__track" cx="18" cy="18" r="15.9155" pathLength="100" />
-              <circle id="statProgressFill" class="circular-gauge__fill" cx="18" cy="18" r="15.9155" pathLength="100" stroke="url(#gradPrimaryGauge)" stroke-dasharray="0, 100" />
+            <svg class="circular-gauge__svg" viewBox="0 0 36 36" width="62" height="62" aria-hidden="true">
+              <circle class="circular-gauge__track" cx="18" cy="18" r="15.9155" fill="none" stroke="#e9dce6" stroke-width="3.6" pathLength="100" />
+              <circle id="statProgressFill" class="circular-gauge__fill" cx="18" cy="18" r="15.9155" fill="none" stroke="#ff4fa3" stroke-width="3.6" stroke-linecap="round" pathLength="100" stroke-dasharray="0, 100" style="opacity: 0;" />
             </svg>
             <span id="statCompRate" class="stat-rate">0.0%</span>
           </div>
@@ -54,15 +48,9 @@
 
         <div class="stat-card">
           <div class="circular-gauge circular-gauge--sub" role="progressbar" aria-label="絞り込み中のコンプリート率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <svg class="circular-gauge__svg" viewBox="0 0 36 36" aria-hidden="true">
-              <defs>
-                <linearGradient id="gradSubGauge" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#6a89cc" />
-                  <stop offset="100%" stop-color="#a55eea" />
-                </linearGradient>
-              </defs>
-              <circle class="circular-gauge__track" cx="18" cy="18" r="15.9155" pathLength="100" />
-              <circle id="statFilteredProgressFill" class="circular-gauge__fill" cx="18" cy="18" r="15.9155" pathLength="100" stroke="url(#gradSubGauge)" stroke-dasharray="0, 100" />
+            <svg class="circular-gauge__svg" viewBox="0 0 36 36" width="62" height="62" aria-hidden="true">
+              <circle class="circular-gauge__track" cx="18" cy="18" r="15.9155" fill="none" stroke="#e9dce6" stroke-width="3.6" pathLength="100" />
+              <circle id="statFilteredProgressFill" class="circular-gauge__fill" cx="18" cy="18" r="15.9155" fill="none" stroke="#6a89cc" stroke-width="3.6" stroke-linecap="round" pathLength="100" stroke-dasharray="0, 100" style="opacity: 0;" />
             </svg>
             <span id="statFilteredRate" class="stat-rate stat-rate--sub">0.0%</span>
           </div>
