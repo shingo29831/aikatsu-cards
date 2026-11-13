@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アイカツ！アンコール カードコレクション管理</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-wrapper">
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="brand-Area">
+          <span class="brand-badge">DCD AIKATSU! ENCORE</span>
+          <h1 class="app-title">アイカツ！アンコール カード管理</h1>
+        </div>
+        <div class="header-actions">
+          <span id="syncStatusBadge" class="sync-badge" data-state="info">カードデータ準備中...</span>
+          <button type="button" id="btnSyncOfficial" class="btn btn-outline">公式サイト再同期</button>
+          <button type="button" id="btnQuickExportOwned" class="btn btn-outline">所持JSON保存</button>
+          <label class="btn btn-outline file-label">
+            所持JSON読込
+            <input type="file" id="inputQuickImportOwned" accept=".json,application/json" hidden>
+          </label>
+          <button type="button" id="btnOpenDataModal" class="btn btn-secondary">データ管理 / JSON入出力</button>
+        </div>
+      </div>
+
+      <section class="stats-dashboard" aria-label="コレクション統計">
+        <div class="stat-card stat-card--primary">
+          <div class="stat-head">
+            <span class="stat-label">総合コンプ率 (種類)</span>
+            <span id="statCompRate" class="stat-rate">0.0%</span>
+          </div>
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div id="statProgressFill" class="progress-bar__fill" style="width: 0%"></div>
+          </div>
+          <div class="stat-foot">
+            <span>所持種類: <strong id="statOwnedUnique">0</strong> / <span id="statTotalUnique">0</span> 種</span>
+            <span>総所持枚数: <strong id="statTotalCopies">0</strong> 枚</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-head">
+            <span class="stat-label">表示中の条件でのコンプ率</span>
+            <span id="statFilteredRate" class="stat-rate stat-rate--sub">0.0%</span>
+          </div>
+          <div class="progress-bar progress-bar--sub">
+            <div id="statFilteredProgressFill" class="progress-bar__fill" style="width: 0%"></div>
+          </div>
+          <div class="stat-foot">
+            <span>条件内所持: <strong id="statFilteredOwned">0</strong> / <span id="statFilteredTotal">0</span> 種</span>
+            <span>お気に入り: <strong id="statFavoriteCount">0</strong> 種</span>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main class="main-container">
+      <section class="search-panel" aria-label="カード検索・絞り込み">
+        <form id="searchForm" class="search-form" onsubmit="return false;">
+          <div class="search-row search-row--top">
+            <div class="form-group form-group--keyword">
+              <label for="filterKeyword" class="form-label">フリーワード</label>
+              <input id="filterKeyword" type="search" class="form-input" placeholder="カード名、カード番号 (例: EP-001)、入手方法など" maxlength="200">
+            </div>
+
+            <div class="form-group">
+              <label for="filterSeries" class="form-label">弾数 / シリーズ</label>
+              <select id="filterSeries" class="form-select">
+                <option value="">すべて</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="filterOwnership" class="form-label">所持状態</label>
+              <select id="filterOwnership" class="form-select">
+                <option value="all">すべて表示</option>
+                <option value="owned">所持のみ (1枚以上)</option>
+                <option value="unowned">未所持のみ (0枚)</option>
+                <option value="duplicate">ダブりのみ (2枚以上)</option>
+              </select>
+            </div>
+
+            <div class="form-group form-group--fav">
+              <span class="form-label">お気に入り</span>
+              <label class="toggle-check">
+                <input type="checkbox" id="filterFavorite">
+                <span class="toggle-check__box">★ お気に入りのみ</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="search-detail-toggle-wrap">
+            <button type="button" id="btnToggleDetail" class="btn-detail-toggle" aria-expanded="true">
+              <span>くわしくさがす（タイプ・レアリティ・カテゴリ・ブランド）</span>
+              <span class="toggle-icon">▼</span>
+            </button>
+          </div>
+
+          <div id="searchDetailArea" class="search-detail-area is-open">
+            <div class="search-row search-row--options">
+              <div class="form-group">
+                <label for="filterType" class="form-label">タイプ</label>
+                <select id="filterType" class="form-select">
+                  <option value="">すべて</option>
+                  <option value="キュート">キュート</option>
+                  <option value="クール">クール</option>
+                  <option value="セクシー">セクシー</option>
+                  <option value="ポップ">ポップ</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="filterRarity" class="form-label">レアリティ</label>
+                <select id="filterRarity" class="form-select">
+                  <option value="">すべて</option>
+                  <option value="PR">プレミアムレア (PR)</option>
+                  <option value="ER">アンコールレア (ER)</option>
+                  <option value="R">レア (R)</option>
+                  <option value="N">ノーマル (N)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="filterCategory" class="form-label">カテゴリ</label>
+                <select id="filterCategory" class="form-select">
+                  <option value="">すべて</option>
+                  <option value="トップス">トップス</option>
+                  <option value="ボトムス">ボトムス</option>
+                  <option value="シューズ">シューズ</option>
+                  <option value="トップス&ボトムス">トップス&amp;ボトムス</option>
+                  <option value="フルコーデ">フルコーデ</option>
+                  <option value="アクセサリー">アクセサリー</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="filterBrand" class="form-label">ブランド</label>
+                <select id="filterBrand" class="form-select">
+                  <option value="">すべて</option>
+                  <option value="ノーブランド">ノーブランド</option>
+                  <option value="エンジェリーシュガー">エンジェリーシュガー</option>
+                  <option value="フューチャリングガール">フューチャリングガール</option>
+                  <option value="スパイシーアゲハ">スパイシーアゲハ</option>
+                  <option value="ドリーミークラウン">ドリーミークラウン</option>
+                  <option value="メープルリボン">メープルリボン</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="search-actions">
+            <button type="button" id="btnResetFilters" class="btn btn-outline">条件をクリア</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="result-bar" aria-label="検索結果と並び替え">
+        <p class="result-count">見つかったカード <strong id="resultCountNum">0</strong> 枚</p>
+        <div class="result-controls">
+          <div class="display-mode-group" role="group" aria-label="表示モード切替">
+            <button type="button" class="btn-mode js-display-mode-btn is-active" data-mode="checker" aria-pressed="true">チェッカー</button>
+            <button type="button" class="btn-mode js-display-mode-btn" data-mode="binder" aria-pressed="false">バインダー</button>
+            <button type="button" class="btn-mode js-display-mode-btn" data-mode="color" aria-pressed="false">通常カラー</button>
+          </div>
+          <label for="sortSelect" class="sort-label">ならびかえ</label>
+          <select id="sortSelect" class="form-select form-select--sm">
+            <option value="1">カード番号昇順</option>
+            <option value="2">カード番号降順</option>
+            <option value="3">レアリティ昇順</option>
+            <option value="4">レアリティ降順</option>
+            <option value="5">所持枚数が多い順</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="card-grid-section" aria-label="カード一覧">
+        <ul id="cardGrid" class="card-grid"></ul>
+        <div id="emptyState" class="empty-state" hidden>
+          <p>条件に一致するカードが見つかりませんでした。</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- カード詳細モーダル -->
+  <div id="cardDetailModal" class="modal-overlay" hidden aria-hidden="true">
+    <div class="modal-dialog modal-dialog--card" role="dialog" aria-modal="true" aria-labelledby="modalCardName">
+      <button type="button" id="btnCloseCardModal" class="modal-close" aria-label="閉じる">×</button>
+      <div class="card-modal-content">
+        <div id="modalVisualWrap" class="card-modal-visual">
+          <div id="modalFlipContainer" class="flip-container">
+            <div class="flip-face flip-face--front">
+              <span class="face-badge">表面</span>
+              <img id="modalImgFront" src="" alt="カード表面" class="card-modal-img">
+            </div>
+            <div class="flip-face flip-face--back">
+              <span class="face-badge">裏面</span>
+              <img id="modalImgBack" src="" alt="カード裏面" class="card-modal-img">
+            </div>
+          </div>
+          <div class="card-modal-visual-controls">
+            <button type="button" id="btnPrevCard" class="btn btn-nav" aria-label="前のカード">◀ 前へ</button>
+            <button type="button" id="btnFlipCard" class="btn btn-flip">裏面を見る ↻</button>
+            <button type="button" id="btnNextCard" class="btn btn-nav" aria-label="次のカード">次へ ▶</button>
+          </div>
+        </div>
+
+        <div class="card-modal-details">
+          <div class="card-modal-header">
+            <span id="modalCardNumber" class="card-number-badge"></span>
+            <span id="modalCardRarity" class="rarity-badge"></span>
+            <span id="modalCardType" class="type-badge"></span>
+            <button type="button" id="modalBtnFav" class="btn-fav-large" aria-label="お気に入り切り替え">☆</button>
+          </div>
+          <h2 id="modalCardName" class="card-modal-title"></h2>
+
+          <dl class="card-spec-list">
+            <div class="card-spec-item">
+              <dt>シリーズ</dt>
+              <dd id="modalCardSeries"></dd>
+            </div>
+            <div class="card-spec-item">
+              <dt>カテゴリ</dt>
+              <dd id="modalCardCategory"></dd>
+            </div>
+            <div class="card-spec-item">
+              <dt>ブランド</dt>
+              <dd id="modalCardBrand"></dd>
+            </div>
+            <div id="modalObtainWrap" class="card-spec-item" hidden>
+              <dt>入手方法</dt>
+              <dd id="modalCardObtain"></dd>
+            </div>
+          </dl>
+
+          <div class="card-modal-ownership">
+            <span class="ownership-label">所持枚数管理</span>
+            <div class="counter-control counter-control--large">
+              <button type="button" id="modalBtnDec" class="btn-counter" aria-label="1枚減らす">−</button>
+              <span id="modalOwnedCount" class="counter-value">0</span>
+              <button type="button" id="modalBtnInc" class="btn-counter" aria-label="1枚増やす">＋</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- データ管理モーダル -->
+  <div id="dataManageModal" class="modal-overlay" hidden aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="dataModalTitle">
+      <button type="button" id="btnCloseDataModal" class="modal-close" aria-label="閉じる">×</button>
+      <h2 id="dataModalTitle" class="modal-title">データ管理・JSON入出力</h2>
+
+      <div class="data-modal-section">
+        <h3>1. カードマスターJSONの読み込み・編集</h3>
+        <p class="data-help">指定のJSON構造（<code>{"id": "promo", "name": "...", "cards": [...]}</code> またはその配列）を読み込んでカード一覧を更新できます。</p>
+        <div class="file-action-row">
+          <label class="btn btn-secondary file-label">
+            JSONファイルを選択
+            <input type="file" id="inputCardJsonFile" accept=".json,application/json" hidden>
+          </label>
+          <button type="button" id="btnExportCardJson" class="btn btn-outline">現在のカードJSONを保存</button>
+          <button type="button" id="btnResetMasterData" class="btn btn-danger-outline">初期データに戻す</button>
+        </div>
+        <textarea id="textareaCardJson" class="json-textarea" rows="8" placeholder="ここにカード定義JSONを貼り付けて「JSONを反映」を押すこともできます"></textarea>
+        <div class="file-action-row">
+          <button type="button" id="btnApplyCardJson" class="btn btn-primary">テキストのJSONを反映</button>
+        </div>
+      </div>
+
+      <div class="data-modal-section">
+        <h3>2. 所持状況・お気に入りデータのバックアップ</h3>
+        <div class="file-action-row">
+          <button type="button" id="btnExportUserState" class="btn btn-secondary">所持データを書き出し (JSON)</button>
+          <label class="btn btn-outline file-label">
+            所持データを読み込み
+            <input type="file" id="inputUserStateFile" accept=".json,application/json" hidden>
+          </label>
+          <button type="button" id="btnClearUserState" class="btn btn-danger-outline">所持状況をすべて0にリセット</button>
+        </div>
+        <textarea id="textareaUserStateJson" class="json-textarea" rows="6" placeholder="ここに所持データJSONを貼り付けてインポートすることもできます"></textarea>
+        <div class="file-action-row">
+          <button type="button" id="btnApplyUserStateJson" class="btn btn-primary">テキストの所持JSONを反映</button>
+        </div>
+      </div>
+
+      <p id="dataModalStatus" class="status-message" role="status"></p>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
