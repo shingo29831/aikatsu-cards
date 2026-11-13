@@ -92,65 +92,62 @@ body {
   gap: 6px;
 }
 
-.sync-badge {
+.btn-sync {
+  gap: 5px;
+}
+
+.btn-sync__icon-wrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  flex-shrink: 0;
-  border-radius: 999px;
-  background: #f5eef7;
-  color: var(--text-muted);
-  border: 1px solid #ead7e8;
-}
-
-.sync-badge__icon {
-  display: none;
   width: 15px;
   height: 15px;
+  flex-shrink: 0;
+  color: var(--text-muted);
 }
 
-@keyframes syncBadgeSpin {
+.btn-sync__icon {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes syncIconSpin {
   to {
     transform: rotate(360deg);
   }
 }
 
-.sync-badge[data-state="info"] .sync-badge__icon--loading,
-.sync-badge[data-state="loading"] .sync-badge__icon--loading {
-  display: block;
-  animation: syncBadgeSpin 0.85s linear infinite;
-}
-
-.sync-badge[data-state="success"] .sync-badge__icon--check,
-.sync-badge[data-state="custom"] .sync-badge__icon--check {
-  display: block;
-}
-
-.sync-badge[data-state="warn"] .sync-badge__icon--warn {
-  display: block;
-}
-
-.sync-badge[data-state="loading"] {
-  background: #eef6ff;
+.btn-sync[data-state="info"] .btn-sync__icon-wrap,
+.btn-sync[data-state="loading"] .btn-sync__icon-wrap {
   color: #1e6fd9;
 }
 
-.sync-badge[data-state="success"] {
-  background: #e8f8f0;
+.btn-sync[data-state="info"] .btn-sync__icon--loading,
+.btn-sync[data-state="loading"] .btn-sync__icon--loading {
+  display: block;
+  animation: syncIconSpin 0.85s linear infinite;
+}
+
+.btn-sync[data-state="success"] .btn-sync__icon-wrap {
   color: #187a49;
 }
 
-.sync-badge[data-state="warn"] {
-  background: #fff4e5;
+.btn-sync[data-state="custom"] .btn-sync__icon-wrap {
+  color: var(--pink-dark);
+}
+
+.btn-sync[data-state="success"] .btn-sync__icon--check,
+.btn-sync[data-state="custom"] .btn-sync__icon--check {
+  display: block;
+}
+
+.btn-sync[data-state="warn"] .btn-sync__icon-wrap {
   color: #b86200;
 }
 
-.sync-badge[data-state="custom"] {
-  background: var(--pink-light);
-  color: var(--pink-dark);
+.btn-sync[data-state="warn"] .btn-sync__icon--warn {
+  display: block;
 }
 
 .brand-badge {
@@ -386,13 +383,12 @@ body {
     gap: 4px;
     justify-content: flex-start;
   }
-  .sync-badge {
-    width: 24px;
-    height: 24px;
+  .btn-sync {
+    gap: 4px;
   }
-  .sync-badge__icon {
-    width: 13px;
-    height: 13px;
+  .btn-sync__icon-wrap {
+    width: 12px;
+    height: 12px;
   }
   .header-actions .btn {
     padding: 3px 8px;

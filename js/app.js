@@ -90,14 +90,14 @@
     }
 
     _setSyncBadge(text, state) {
-      if (!this.el.syncStatusBadge) return;
+      if (!this.el.btnSyncOfficial) return;
       const validStates = ['info', 'loading', 'success', 'warn', 'custom'];
       const normalizedState = validStates.includes(state) ? state : 'info';
       const message = text || '';
-      // textContentを上書きすると内包SVGアイコンが消えるため属性のみ更新する
-      this.el.syncStatusBadge.dataset.state = normalizedState;
-      this.el.syncStatusBadge.setAttribute('aria-label', message);
-      this.el.syncStatusBadge.title = message;
+      // 内包SVGアイコンとボタンラベルを維持するため属性のみ更新する
+      this.el.btnSyncOfficial.dataset.state = normalizedState;
+      this.el.btnSyncOfficial.setAttribute('aria-label', message ? `カード更新（${message}）` : 'カード更新');
+      this.el.btnSyncOfficial.title = message;
     }
 
     _initResponsiveSearchState() {
@@ -111,7 +111,6 @@
     _cacheElements() {
       const byId = (id) => document.getElementById(id);
       this.el = {
-        syncStatusBadge: byId('syncStatusBadge'),
         btnSyncOfficial: byId('btnSyncOfficial'),
         btnQuickExportOwned: byId('btnQuickExportOwned'),
         inputQuickImportOwned: byId('inputQuickImportOwned'),
