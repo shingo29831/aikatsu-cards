@@ -386,39 +386,39 @@ body {
       "gauge head"
       "gauge foot";
   }
-  .circular-gauge {
+  header.app-header .circular-gauge {
     width: 34px;
     height: 34px;
     max-width: 34px;
     max-height: 34px;
   }
-  .circular-gauge__svg {
+  header.app-header .circular-gauge__svg {
     max-width: 34px;
     max-height: 34px;
   }
-  .stat-rate {
+  header.app-header .stat-rate {
     font-size: 0.58rem;
   }
-  .stat-head {
+  header.app-header .stat-head {
     align-self: end;
   }
-  .stat-label {
+  header.app-header .stat-label {
     font-size: 0.68rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .stat-foot {
+  header.app-header .stat-foot {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    gap: 4px;
-    font-size: clamp(0.58rem, 2.5vw, 0.7rem);
+    gap: 4px 6px;
+    font-size: clamp(0.58rem, 2.5vw, 0.76rem);
     line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
   }
-  .stat-foot strong {
+  header.app-header .stat-foot strong {
     font-size: 1.08em;
   }
 }
@@ -428,23 +428,23 @@ body {
     padding: 4px 5px;
     column-gap: 4px;
   }
-  .circular-gauge {
+  header.app-header .circular-gauge {
     width: 30px;
     height: 30px;
     max-width: 30px;
     max-height: 30px;
   }
-  .circular-gauge__svg {
+  header.app-header .circular-gauge__svg {
     max-width: 30px;
     max-height: 30px;
   }
-  .stat-rate {
+  header.app-header .stat-rate {
     font-size: 0.52rem;
   }
-  .stat-label {
+  header.app-header .stat-label {
     font-size: 0.62rem;
   }
-  .stat-foot {
+  header.app-header .stat-foot {
     font-size: 0.56rem;
     gap: 3px;
   }
