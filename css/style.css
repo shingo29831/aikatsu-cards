@@ -818,6 +818,26 @@ body {
   margin-bottom: 10px;
 }
 
+.advanced-details {
+  margin-top: 10px;
+  background: #faf6f9;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.advanced-details summary {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+  cursor: pointer;
+  user-select: none;
+}
+
+.advanced-details__body {
+  margin-top: 10px;
+}
+
 .json-textarea {
   width: 100%;
   font-family: monospace;
@@ -826,6 +846,7 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   margin-bottom: 8px;
+  background: #fff;
 }
 
 .status-message {

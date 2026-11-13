@@ -15,42 +15,42 @@
           <h1 class="app-title">アイカツ！アンコール カード管理</h1>
         </div>
         <div class="header-actions">
-          <span id="syncStatusBadge" class="sync-badge" data-state="info">カードデータ準備中...</span>
-          <button type="button" id="btnSyncOfficial" class="btn btn-outline">公式サイト再同期</button>
-          <button type="button" id="btnQuickExportOwned" class="btn btn-outline">所持JSON保存</button>
+          <span id="syncStatusBadge" class="sync-badge" data-state="info">カード一覧を準備中...</span>
+          <button type="button" id="btnSyncOfficial" class="btn btn-outline">最新カードに更新</button>
+          <button type="button" id="btnQuickExportOwned" class="btn btn-outline">所持データを保存</button>
           <label class="btn btn-outline file-label">
-            所持JSON読込
+            所持データを復元
             <input type="file" id="inputQuickImportOwned" accept=".json,application/json" hidden>
           </label>
-          <button type="button" id="btnOpenDataModal" class="btn btn-secondary">データ管理 / JSON入出力</button>
+          <button type="button" id="btnOpenDataModal" class="btn btn-secondary">データの保存・引き継ぎ</button>
         </div>
       </div>
 
       <section class="stats-dashboard" aria-label="コレクション統計">
         <div class="stat-card stat-card--primary">
           <div class="stat-head">
-            <span class="stat-label">総合コンプ率 (種類)</span>
+            <span class="stat-label">全体のコンプリート率</span>
             <span id="statCompRate" class="stat-rate">0.0%</span>
           </div>
           <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
             <div id="statProgressFill" class="progress-bar__fill" style="width: 0%"></div>
           </div>
           <div class="stat-foot">
-            <span>所持種類: <strong id="statOwnedUnique">0</strong> / <span id="statTotalUnique">0</span> 種</span>
-            <span>総所持枚数: <strong id="statTotalCopies">0</strong> 枚</span>
+            <span>集めた種類: <strong id="statOwnedUnique">0</strong> / <span id="statTotalUnique">0</span> 種</span>
+            <span>持っている合計: <strong id="statTotalCopies">0</strong> 枚</span>
           </div>
         </div>
 
         <div class="stat-card">
           <div class="stat-head">
-            <span class="stat-label">表示中の条件でのコンプ率</span>
+            <span class="stat-label">絞り込み中のコンプリート率</span>
             <span id="statFilteredRate" class="stat-rate stat-rate--sub">0.0%</span>
           </div>
           <div class="progress-bar progress-bar--sub">
             <div id="statFilteredProgressFill" class="progress-bar__fill" style="width: 0%"></div>
           </div>
           <div class="stat-foot">
-            <span>条件内所持: <strong id="statFilteredOwned">0</strong> / <span id="statFilteredTotal">0</span> 種</span>
+            <span>この条件で所持: <strong id="statFilteredOwned">0</strong> / <span id="statFilteredTotal">0</span> 種</span>
             <span>お気に入り: <strong id="statFavoriteCount">0</strong> 種</span>
           </div>
         </div>
@@ -62,7 +62,7 @@
         <form id="searchForm" class="search-form" onsubmit="return false;">
           <div class="search-row search-row--top">
             <div class="form-group form-group--keyword">
-              <label for="filterKeyword" class="form-label">フリーワード</label>
+              <label for="filterKeyword" class="form-label">キーワード検索</label>
               <input id="filterKeyword" type="search" class="form-input" placeholder="カード名、カード番号 (例: EP-001)、入手方法など" maxlength="200">
             </div>
 
@@ -74,11 +74,11 @@
             </div>
 
             <div class="form-group">
-              <label for="filterOwnership" class="form-label">所持状態</label>
+              <label for="filterOwnership" class="form-label">持っているか</label>
               <select id="filterOwnership" class="form-select">
                 <option value="all">すべて表示</option>
-                <option value="owned">所持のみ (1枚以上)</option>
-                <option value="unowned">未所持のみ (0枚)</option>
+                <option value="owned">持っているカードのみ (1枚以上)</option>
+                <option value="unowned">持っていないカードのみ (0枚)</option>
                 <option value="duplicate">ダブりのみ (2枚以上)</option>
               </select>
             </div>
@@ -167,11 +167,11 @@
           </div>
           <label for="sortSelect" class="sort-label">ならびかえ</label>
           <select id="sortSelect" class="form-select form-select--sm">
-            <option value="1">カード番号昇順</option>
-            <option value="2">カード番号降順</option>
-            <option value="3">レアリティ昇順</option>
-            <option value="4">レアリティ降順</option>
-            <option value="5">所持枚数が多い順</option>
+            <option value="1">カード番号順（1→9）</option>
+            <option value="2">カード番号順（9→1）</option>
+            <option value="3">レアリティ順（N→ER）</option>
+            <option value="4">レアリティ順（ER→N）</option>
+            <option value="5">持っている枚数が多い順</option>
           </select>
         </div>
       </section>
@@ -253,39 +253,52 @@
   <div id="dataManageModal" class="modal-overlay" hidden aria-hidden="true">
     <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="dataModalTitle">
       <button type="button" id="btnCloseDataModal" class="modal-close" aria-label="閉じる">×</button>
-      <h2 id="dataModalTitle" class="modal-title">データ管理・JSON入出力</h2>
+      <h2 id="dataModalTitle" class="modal-title">データの保存・引き継ぎ（バックアップ）</h2>
 
       <div class="data-modal-section">
-        <h3>1. カードマスターJSONの読み込み・編集</h3>
-        <p class="data-help">指定のJSON構造（<code>{"id": "promo", "name": "...", "cards": [...]}</code> またはその配列）を読み込んでカード一覧を更新できます。</p>
+        <h3>1. 持っているカード・お気に入りの保存と引き継ぎ</h3>
+        <p class="data-help">スマホの機種変更やブラウザのデータ消去に備えて、登録した所持枚数やお気に入りをファイルとして保存・復元できます。</p>
         <div class="file-action-row">
+          <button type="button" id="btnExportUserState" class="btn btn-primary">バックアップファイルを保存する</button>
           <label class="btn btn-secondary file-label">
-            JSONファイルを選択
-            <input type="file" id="inputCardJsonFile" accept=".json,application/json" hidden>
+            バックアップファイルを読み込む
+            <input type="file" id="inputUserStateFile" accept=".json,application/json" hidden>
           </label>
-          <button type="button" id="btnExportCardJson" class="btn btn-outline">現在のカードJSONを保存</button>
-          <button type="button" id="btnResetMasterData" class="btn btn-danger-outline">初期データに戻す</button>
+          <button type="button" id="btnClearUserState" class="btn btn-danger-outline">所持枚数をすべて0枚にリセット</button>
         </div>
-        <textarea id="textareaCardJson" class="json-textarea" rows="8" placeholder="ここにカード定義JSONを貼り付けて「JSONを反映」を押すこともできます"></textarea>
-        <div class="file-action-row">
-          <button type="button" id="btnApplyCardJson" class="btn btn-primary">テキストのJSONを反映</button>
-        </div>
+        <details class="advanced-details">
+          <summary>文字（コピー＆ペースト）で直接引き継ぐ場合はこちら</summary>
+          <div class="advanced-details__body">
+            <p class="data-help">下の枠内の文字をコピーしてメモ帳などに保存したり、保存した文字を貼り付けて復元できます。</p>
+            <textarea id="textareaUserStateJson" class="json-textarea" rows="5" placeholder="ここにバックアップ用の文字データを貼り付けて「貼り付けた内容を反映する」を押してください"></textarea>
+            <div class="file-action-row">
+              <button type="button" id="btnApplyUserStateJson" class="btn btn-primary">貼り付けた内容を反映する</button>
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="data-modal-section">
-        <h3>2. 所持状況・お気に入りデータのバックアップ</h3>
+        <h3>2. カード図鑑データの更新・管理</h3>
+        <p class="data-help">公式サイトの最新カード情報への更新や、別ファイルからのカード図鑑データの読み込みができます。</p>
         <div class="file-action-row">
-          <button type="button" id="btnExportUserState" class="btn btn-secondary">所持データを書き出し (JSON)</button>
+          <button type="button" id="btnResetMasterData" class="btn btn-secondary">最新のカード図鑑データに更新</button>
           <label class="btn btn-outline file-label">
-            所持データを読み込み
-            <input type="file" id="inputUserStateFile" accept=".json,application/json" hidden>
+            カード図鑑ファイルを読み込む
+            <input type="file" id="inputCardJsonFile" accept=".json,application/json" hidden>
           </label>
-          <button type="button" id="btnClearUserState" class="btn btn-danger-outline">所持状況をすべて0にリセット</button>
+          <button type="button" id="btnExportCardJson" class="btn btn-outline">現在のカード図鑑をファイル保存</button>
         </div>
-        <textarea id="textareaUserStateJson" class="json-textarea" rows="6" placeholder="ここに所持データJSONを貼り付けてインポートすることもできます"></textarea>
-        <div class="file-action-row">
-          <button type="button" id="btnApplyUserStateJson" class="btn btn-primary">テキストの所持JSONを反映</button>
-        </div>
+        <details class="advanced-details">
+          <summary>文字（テキスト）でカード図鑑データを直接追加・編集する</summary>
+          <div class="advanced-details__body">
+            <p class="data-help">カード一覧データや公式カードリストのページ内容を貼り付けて図鑑を更新できます。</p>
+            <textarea id="textareaCardJson" class="json-textarea" rows="6" placeholder="ここにカード一覧データを貼り付けて「貼り付けたカード図鑑を反映する」を押してください"></textarea>
+            <div class="file-action-row">
+              <button type="button" id="btnApplyCardJson" class="btn btn-primary">貼り付けたカード図鑑を反映する</button>
+            </div>
+          </div>
+        </details>
       </div>
 
       <p id="dataModalStatus" class="status-message" role="status"></p>

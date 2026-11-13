@@ -472,7 +472,7 @@
    */
   function normalizeCardData(rawData) {
     if (!rawData) {
-      throw new Error('JSONデータが空です。');
+      throw new Error('カードデータが空です。');
     }
 
     let datasets = [];
@@ -480,12 +480,12 @@
       if (rawData.length > 0 && rawData[0] && Array.isArray(rawData[0].cards)) {
         datasets = rawData;
       } else {
-        datasets = [{ id: 'custom', name: 'カスタムカード', cards: rawData }];
+        datasets = [{ id: 'custom', name: '追加カード', cards: rawData }];
       }
     } else if (typeof rawData === 'object' && Array.isArray(rawData.cards)) {
       datasets = [rawData];
     } else {
-      throw new Error('JSON構造が不正です。{"id": "...", "name": "...", "cards": [...]} 形式で指定してください。');
+      throw new Error('カード図鑑データの形式が正しくありません。正しいカード一覧ファイルを指定してください。');
     }
 
     const seriesMap = new Map();

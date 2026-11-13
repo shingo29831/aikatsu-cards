@@ -288,9 +288,14 @@
      * @param {string} jsonString
      */
     importUserStateJson(jsonString) {
-      const parsed = JSON.parse(jsonString);
+      let parsed;
+      try {
+        parsed = JSON.parse(jsonString);
+      } catch (_e) {
+        throw new Error('データの形式が正しくありません。バックアップファイルや貼り付けた文字をご確認ください。');
+      }
       if (!parsed || typeof parsed !== 'object') {
-        throw new Error('所持データJSONの形式が正しくありません。');
+        throw new Error('所持データの形式が正しくありません。');
       }
 
       const nextCounts = {};

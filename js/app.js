@@ -29,7 +29,7 @@
       const savedMaster = this._storage.loadCustomMasterData();
       if (savedMaster) {
         this._applyMasterData(savedMaster, false);
-        this._setSyncBadge('カスタムJSON適用中', 'custom');
+        this._setSyncBadge('追加カード図鑑を表示中', 'custom');
         return;
       }
 
@@ -58,8 +58,8 @@
         this._applyMasterData(result.rawStructure, false);
         const label =
           result.source === 'official'
-            ? `公式サイト同期完了 (${this._allCards.length}枚)`
-            : `カードデータ読込完了 (${this._allCards.length}枚)`;
+            ? `最新カード取得完了 (${this._allCards.length}枚)`
+            : `カード一覧読込完了 (${this._allCards.length}枚)`;
         this._setSyncBadge(label, 'success');
       } catch (_err) {
         if (this._allCards.length === 0) {
@@ -69,7 +69,7 @@
             this._applyMasterData(fallback, false);
           }
         }
-        this._setSyncBadge(`オフラインデータ表示中 (${this._allCards.length}枚)`, 'warn');
+        this._setSyncBadge(`保存済みカード一覧を表示中 (${this._allCards.length}枚)`, 'warn');
       }
     }
 
@@ -200,6 +200,7 @@
       if (this.el.btnQuickExportOwned) {
         this.el.btnQuickExportOwned.addEventListener('click', () => {
           this._downloadJson(this._storage.exportUserStateJson(this._allCards), 'aikatsu_owned_cards.json');
+          this._setSyncBadge('所持データをファイルに保存しました', 'success');
         });
       }
 
@@ -339,14 +340,14 @@
           if (rawText.startsWith('<') && rawText.includes('cardList')) {
             const parsedHtml = this._dataService.parseOfficialCardListHtml(rawText);
             this._applyMasterData(parsedHtml.seriesGroups, true);
-            this.el.dataModalStatus.textContent = `公式HTMLから ${parsedHtml.cards.length} 枚のカードを読み込みました。`;
+            this.el.dataModalStatus.textContent = `公式ページのデータから ${parsedHtml.cards.length} 枚のカードを読み込みました。`;
             return;
           }
           const parsed = JSON.parse(rawText);
           this._applyMasterData(parsed, true);
-          this.el.dataModalStatus.textContent = 'カードマスターJSONを反映しました。';
+          this.el.dataModalStatus.textContent = 'カード図鑑データを反映しました。';
         } catch (err) {
-          this.el.dataModalStatus.textContent = `エラー: ${err.message}`;
+          this.el.dataModalStatus.textContent = `エラー: ${this._formatUserFriendlyError(err)}`;
         }
       });
 
@@ -361,7 +362,7 @@
             this._applyMasterData(parsed, true);
             this.el.dataModalStatus.textContent = `ファイル「${file.name}」を読み込みました。`;
           } catch (err) {
-            this.el.dataModalStatus.textContent = `読み込みエラー: ${err.message}`;
+            this.el.dataModalStatus.textContent = `読み込みエラー: ${this._formatUserFriendlyError(err)}`;
           }
         };
         reader.readAsText(file);
@@ -370,17 +371,19 @@
 
       this.el.btnExportCardJson.addEventListener('click', () => {
         this._downloadJson(JSON.stringify(this._rawMasterStructure, null, 2), 'cards.json');
+        this.el.dataModalStatus.textContent = '現在のカード図鑑をファイルに保存しました。';
       });
 
       this.el.btnResetMasterData.addEventListener('click', async () => {
         this._storage.clearCustomMasterData();
         await this.syncFromOfficialSite();
         this.el.textareaCardJson.value = JSON.stringify(this._rawMasterStructure, null, 2);
-        this.el.dataModalStatus.textContent = '公式サイトの最新カードデータに同期しました。';
+        this.el.dataModalStatus.textContent = '最新のカード図鑑データに更新しました。';
       });
 
       this.el.btnExportUserState.addEventListener('click', () => {
         this._downloadJson(this._storage.exportUserStateJson(this._allCards), 'aikatsu_owned_cards.json');
+        this.el.dataModalStatus.textContent = 'バックアップファイルを保存しました。';
       });
 
       this.el.inputUserStateFile.addEventListener('change', (e) => {
@@ -392,9 +395,9 @@
           try {
             this._storage.importUserStateJson(this.el.textareaUserStateJson.value);
             this._refreshView();
-            this.el.dataModalStatus.textContent = 'テキストの所持カードJSONをインポートしました。';
+            this.el.dataModalStatus.textContent = '貼り付けた所持データを復元しました。';
           } catch (err) {
-            this.el.dataModalStatus.textContent = `インポートエラー: ${err.message}`;
+            this.el.dataModalStatus.textContent = `復元エラー: ${this._formatUserFriendlyError(err)}`;
           }
         });
       }
@@ -405,7 +408,7 @@
           this.el.textareaUserStateJson.value = this._storage.exportUserStateJson(this._allCards);
         }
         this._refreshView();
-        this.el.dataModalStatus.textContent = '所持状況をすべてリセットしました。';
+        this.el.dataModalStatus.textContent = '所持枚数をすべてリセットしました。';
       });
     }
 
@@ -421,14 +424,23 @@
             this.el.textareaUserStateJson.value = this._storage.exportUserStateJson(this._allCards);
           }
           this._refreshView();
-          this.el.dataModalStatus.textContent = `所持データ「${file.name}」をインポートしました。`;
-          this._setSyncBadge('所持JSONインポート完了', 'success');
+          this.el.dataModalStatus.textContent = `「${file.name}」から所持データを復元しました。`;
+          this._setSyncBadge('所持データの復元完了', 'success');
         } catch (err) {
-          this.el.dataModalStatus.textContent = `復元エラー: ${err.message}`;
+          this.el.dataModalStatus.textContent = `復元エラー: ${this._formatUserFriendlyError(err)}`;
         }
       };
       reader.readAsText(file);
       e.target.value = '';
+    }
+
+    _formatUserFriendlyError(err) {
+      if (!err) return 'データの読み込みに失敗しました。';
+      // ブラウザ標準の英語SyntaxErrorを一般ユーザー向けの日本語案内に変換
+      if (err instanceof SyntaxError) {
+        return 'データの形式が正しくありません。ファイルや貼り付けた文字が欠けていないかご確認ください。';
+      }
+      return err.message || 'データの読み込みに失敗しました。';
     }
 
     /**
