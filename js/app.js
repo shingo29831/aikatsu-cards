@@ -577,7 +577,7 @@
 
       const overallRate = totalUnique > 0 ? (ownedUnique / totalUnique) * 100 : 0;
       this.el.statCompRate.textContent = `${overallRate.toFixed(1)}%`;
-      this.el.statProgressFill.style.width = `${overallRate.toFixed(1)}%`;
+      this._updateGaugeProgress(this.el.statProgressFill, overallRate);
       this.el.statOwnedUnique.textContent = String(ownedUnique);
       this.el.statTotalUnique.textContent = String(totalUnique);
       this.el.statTotalCopies.textContent = String(totalCopies);
@@ -588,10 +588,25 @@
       const filteredRate = filteredTotal > 0 ? (filteredOwned / filteredTotal) * 100 : 0;
 
       this.el.statFilteredRate.textContent = `${filteredRate.toFixed(1)}%`;
-      this.el.statFilteredProgressFill.style.width = `${filteredRate.toFixed(1)}%`;
+      this._updateGaugeProgress(this.el.statFilteredProgressFill, filteredRate);
       this.el.statFilteredOwned.textContent = String(filteredOwned);
       this.el.statFilteredTotal.textContent = String(filteredTotal);
       this.el.resultCountNum.textContent = String(filteredTotal);
+    }
+
+    _updateGaugeProgress(fillEl, rate) {
+      if (!fillEl) return;
+      const clamped = Math.max(0, Math.min(100, Number.isFinite(rate) ? rate : 0));
+      const formatted = clamped.toFixed(1);
+      fillEl.setAttribute('stroke-dasharray', `${formatted}, 100`);
+      fillEl.style.strokeDasharray = `${formatted}, 100`;
+      // 0%時にstroke-linecap:roundの始点ドットが残るのを防ぐ
+      fillEl.style.opacity = clamped > 0 ? '1' : '0';
+      fillEl.style.width = `${formatted}%`;
+      const gaugeWrap = fillEl.closest('[role="progressbar"]');
+      if (gaugeWrap) {
+        gaugeWrap.setAttribute('aria-valuenow', formatted);
+      }
     }
 
     _renderGrid() {
