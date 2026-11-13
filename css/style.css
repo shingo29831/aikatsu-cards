@@ -176,7 +176,7 @@ body {
   stroke: var(--pink-primary);
   stroke-width: 3.6;
   stroke-linecap: round;
-  transition: stroke-dasharray 0.35s ease, opacity 0.2s ease;
+  transition: stroke-dashoffset 0.35s ease, opacity 0.2s ease;
 }
 
 .circular-gauge--sub .circular-gauge__fill {

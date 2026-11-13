@@ -27,24 +27,33 @@
     if (!fillEl) return;
     const clamped = Math.max(0, Math.min(100, Number.isFinite(rate) ? rate : 0));
     const formatted = clamped.toFixed(1);
-    const dashValue = `${formatted}, 100`;
+    const radius = parseFloat(fillEl.getAttribute && fillEl.getAttribute('r')) || 15.9155;
+    const circumference = 2 * Math.PI * radius;
+    const dashArrayValue = circumference.toFixed(4);
+    const dashOffsetValue = (circumference * (1 - clamped / 100)).toFixed(4);
     const isSub =
       fillEl.id === 'statFilteredProgressFill' ||
       Boolean(fillEl.closest && fillEl.closest('.circular-gauge--sub'));
     const strokeColor = isSub ? '#6a89cc' : '#ff4fa3';
 
+    // pathLength依存のブラウザ間不整合を避けるため実円周長でoffset制御する
+    if (fillEl.removeAttribute) {
+      fillEl.removeAttribute('pathLength');
+    }
     fillEl.setAttribute('fill', 'none');
     fillEl.setAttribute('stroke', strokeColor);
     fillEl.setAttribute('stroke-width', '3.6');
     fillEl.setAttribute('stroke-linecap', 'round');
-    fillEl.setAttribute('stroke-dasharray', dashValue);
+    fillEl.setAttribute('stroke-dasharray', dashArrayValue);
+    fillEl.setAttribute('stroke-dashoffset', dashOffsetValue);
 
     if (fillEl.style) {
       fillEl.style.fill = 'none';
       fillEl.style.stroke = strokeColor;
       fillEl.style.strokeWidth = '3.6';
       fillEl.style.strokeLinecap = 'round';
-      fillEl.style.strokeDasharray = dashValue;
+      fillEl.style.strokeDasharray = dashArrayValue;
+      fillEl.style.strokeDashoffset = dashOffsetValue;
       // 0%時にstroke-linecap:roundの始点ドットが残るのを防ぐ
       fillEl.style.opacity = clamped > 0 ? '1' : '0';
       if (!fillEl.tagName || fillEl.tagName.toLowerCase() !== 'circle') {
