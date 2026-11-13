@@ -180,7 +180,7 @@
         tutorialModal: byId('tutorialModal'),
         btnCloseTutorialModal: byId('btnCloseTutorialModal'),
         btnStartFromTutorial: byId('btnStartFromTutorial'),
-        chkTutorialAutoShow: byId('chkTutorialAutoShow')
+        chkTutorialHideNext: byId('chkTutorialHideNext')
       };
     }
 

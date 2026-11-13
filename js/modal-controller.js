@@ -164,8 +164,8 @@
   function openTutorialModal(app) {
     const el = app.el;
     if (!el.tutorialModal) return;
-    if (el.chkTutorialAutoShow) {
-      el.chkTutorialAutoShow.checked = app._storage.getTutorialAutoShow();
+    if (el.chkTutorialHideNext) {
+      el.chkTutorialHideNext.checked = app._storage.getHideTutorialOnStartup();
     }
     el.tutorialModal.hidden = false;
     el.tutorialModal.setAttribute('aria-hidden', 'false');
@@ -178,10 +178,9 @@
   function closeTutorialModal(app) {
     const el = app.el;
     if (!el.tutorialModal) return;
-    const autoShow = el.chkTutorialAutoShow
-      ? Boolean(el.chkTutorialAutoShow.checked)
-      : app._storage.getTutorialAutoShow();
-    app._storage.setTutorialSettings({ seen: true, autoShow });
+    if (el.chkTutorialHideNext) {
+      app._storage.setHideTutorialOnStartup(Boolean(el.chkTutorialHideNext.checked));
+    }
     el.tutorialModal.hidden = true;
     el.tutorialModal.setAttribute('aria-hidden', 'true');
   }
@@ -364,12 +363,9 @@
         closeTutorialModal(app);
       });
     }
-    if (el.chkTutorialAutoShow) {
-      el.chkTutorialAutoShow.addEventListener('change', () => {
-        app._storage.setTutorialSettings({
-          seen: true,
-          autoShow: Boolean(el.chkTutorialAutoShow.checked)
-        });
+    if (el.chkTutorialHideNext) {
+      el.chkTutorialHideNext.addEventListener('change', () => {
+        app._storage.setHideTutorialOnStartup(Boolean(el.chkTutorialHideNext.checked));
       });
     }
     if (el.tutorialModal) {

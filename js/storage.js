@@ -176,16 +176,15 @@
       try {
         const raw = this._storage.getItem(STORAGE_KEYS.VIEW_SETTINGS);
         if (!raw) {
-          return { displayMode: 'checker', tutorialSeen: false, tutorialAutoShow: false };
+          return { displayMode: 'checker', hideTutorialOnStartup: false };
         }
         const parsed = JSON.parse(raw);
         return {
           displayMode: parsed && parsed.displayMode ? String(parsed.displayMode) : 'checker',
-          tutorialSeen: Boolean(parsed && parsed.tutorialSeen),
-          tutorialAutoShow: Boolean(parsed && parsed.tutorialAutoShow)
+          hideTutorialOnStartup: Boolean(parsed && parsed.hideTutorialOnStartup)
         };
       } catch (_e) {
-        return { displayMode: 'checker', tutorialSeen: false, tutorialAutoShow: false };
+        return { displayMode: 'checker', hideTutorialOnStartup: false };
       }
     }
 
@@ -213,29 +212,18 @@
       );
     }
 
-    hasSeenTutorial() {
-      return Boolean(this._viewSettings.tutorialSeen);
+    getHideTutorialOnStartup() {
+      return Boolean(this._viewSettings.hideTutorialOnStartup);
     }
 
-    getTutorialAutoShow() {
-      return Boolean(this._viewSettings.tutorialAutoShow);
+    setHideTutorialOnStartup(hide) {
+      this._viewSettings.hideTutorialOnStartup = Boolean(hide);
+      this._saveViewSettingsToLocal();
     }
 
     shouldShowTutorial() {
-      // 未表示（初回または履歴・キャッシュ削除後）または再表示設定が有効な場合は表示する
-      if (!this.hasSeenTutorial()) return true;
-      return this.getTutorialAutoShow();
-    }
-
-    setTutorialSettings(options) {
-      const opts = options || {};
-      if (opts.seen !== undefined) {
-        this._viewSettings.tutorialSeen = Boolean(opts.seen);
-      }
-      if (opts.autoShow !== undefined) {
-        this._viewSettings.tutorialAutoShow = Boolean(opts.autoShow);
-      }
-      this._saveViewSettingsToLocal();
+      // 「次回表示しない」がfalse、またはローカル設定未保存時は表示する
+      return !this.getHideTutorialOnStartup();
     }
 
     getCount(cardId) {
