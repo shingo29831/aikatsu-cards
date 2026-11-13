@@ -158,7 +158,36 @@
   }
 
   /**
-   * カード詳細モーダルおよびデータ管理モーダルのイベントをバインドする
+   * チュートリアルモーダルを開く
+   * @param {Object} app
+   */
+  function openTutorialModal(app) {
+    const el = app.el;
+    if (!el.tutorialModal) return;
+    if (el.chkTutorialAutoShow) {
+      el.chkTutorialAutoShow.checked = app._storage.getTutorialAutoShow();
+    }
+    el.tutorialModal.hidden = false;
+    el.tutorialModal.setAttribute('aria-hidden', 'false');
+  }
+
+  /**
+   * チュートリアルモーダルを閉じ、表示設定を保存する
+   * @param {Object} app
+   */
+  function closeTutorialModal(app) {
+    const el = app.el;
+    if (!el.tutorialModal) return;
+    const autoShow = el.chkTutorialAutoShow
+      ? Boolean(el.chkTutorialAutoShow.checked)
+      : app._storage.getTutorialAutoShow();
+    app._storage.setTutorialSettings({ seen: true, autoShow });
+    el.tutorialModal.hidden = true;
+    el.tutorialModal.setAttribute('aria-hidden', 'true');
+  }
+
+  /**
+   * カード詳細モーダル・データ管理モーダル・チュートリアルモーダルのイベントをバインドする
    * @param {Object} app
    */
   function bindModalEvents(app) {
@@ -319,6 +348,48 @@
       app._refreshView();
       el.dataModalStatus.textContent = '所持枚数をすべてリセットしました。';
     });
+
+    if (el.btnOpenTutorial) {
+      el.btnOpenTutorial.addEventListener('click', () => {
+        openTutorialModal(app);
+      });
+    }
+    if (el.btnCloseTutorialModal) {
+      el.btnCloseTutorialModal.addEventListener('click', () => {
+        closeTutorialModal(app);
+      });
+    }
+    if (el.btnStartFromTutorial) {
+      el.btnStartFromTutorial.addEventListener('click', () => {
+        closeTutorialModal(app);
+      });
+    }
+    if (el.chkTutorialAutoShow) {
+      el.chkTutorialAutoShow.addEventListener('change', () => {
+        app._storage.setTutorialSettings({
+          seen: true,
+          autoShow: Boolean(el.chkTutorialAutoShow.checked)
+        });
+      });
+    }
+    if (el.tutorialModal) {
+      el.tutorialModal.addEventListener('click', (e) => {
+        if (e.target === el.tutorialModal) closeTutorialModal(app);
+      });
+    }
+
+    if (typeof document !== 'undefined') {
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        if (el.cardDetailModal && !el.cardDetailModal.hidden) {
+          app._closeCardModal();
+        } else if (el.dataManageModal && !el.dataManageModal.hidden) {
+          el.dataManageModal.hidden = true;
+        } else if (el.tutorialModal && !el.tutorialModal.hidden) {
+          closeTutorialModal(app);
+        }
+      });
+    }
   }
 
   global.AikatsuModalController = {
@@ -329,6 +400,8 @@
     downloadJson,
     formatUserFriendlyError,
     handleUserStateFileImport,
+    openTutorialModal,
+    closeTutorialModal,
     bindModalEvents
   };
 })(typeof window !== 'undefined' ? window : globalThis);

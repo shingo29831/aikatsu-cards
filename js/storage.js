@@ -176,14 +176,24 @@
       try {
         const raw = this._storage.getItem(STORAGE_KEYS.VIEW_SETTINGS);
         if (!raw) {
-          return { displayMode: 'checker' };
+          return { displayMode: 'checker', tutorialSeen: false, tutorialAutoShow: false };
         }
         const parsed = JSON.parse(raw);
         return {
-          displayMode: parsed && parsed.displayMode ? String(parsed.displayMode) : 'checker'
+          displayMode: parsed && parsed.displayMode ? String(parsed.displayMode) : 'checker',
+          tutorialSeen: Boolean(parsed && parsed.tutorialSeen),
+          tutorialAutoShow: Boolean(parsed && parsed.tutorialAutoShow)
         };
       } catch (_e) {
-        return { displayMode: 'checker' };
+        return { displayMode: 'checker', tutorialSeen: false, tutorialAutoShow: false };
+      }
+    }
+
+    _saveViewSettingsToLocal() {
+      try {
+        this._storage.setItem(STORAGE_KEYS.VIEW_SETTINGS, JSON.stringify(this._viewSettings));
+      } catch (_e) {
+        // 無視
       }
     }
 
@@ -193,11 +203,39 @@
 
     setDisplayMode(mode) {
       this._viewSettings.displayMode = String(mode || 'checker');
-      try {
-        this._storage.setItem(STORAGE_KEYS.VIEW_SETTINGS, JSON.stringify(this._viewSettings));
-      } catch (_e) {
-        // 無視
+      this._saveViewSettingsToLocal();
+    }
+
+    hasSavedUserData() {
+      return (
+        Object.keys(this._state.counts || {}).length > 0 ||
+        Object.keys(this._state.favorites || {}).length > 0
+      );
+    }
+
+    hasSeenTutorial() {
+      return Boolean(this._viewSettings.tutorialSeen);
+    }
+
+    getTutorialAutoShow() {
+      return Boolean(this._viewSettings.tutorialAutoShow);
+    }
+
+    shouldShowTutorial() {
+      // 未表示（初回または履歴・キャッシュ削除後）または再表示設定が有効な場合は表示する
+      if (!this.hasSeenTutorial()) return true;
+      return this.getTutorialAutoShow();
+    }
+
+    setTutorialSettings(options) {
+      const opts = options || {};
+      if (opts.seen !== undefined) {
+        this._viewSettings.tutorialSeen = Boolean(opts.seen);
       }
+      if (opts.autoShow !== undefined) {
+        this._viewSettings.tutorialAutoShow = Boolean(opts.autoShow);
+      }
+      this._saveViewSettingsToLocal();
     }
 
     getCount(cardId) {

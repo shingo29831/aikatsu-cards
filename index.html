@@ -105,6 +105,7 @@
             <input type="file" id="inputQuickImportOwned" accept=".json,application/json" hidden>
           </label>
           <button type="button" id="btnOpenDataModal" class="btn btn-secondary">データ管理</button>
+          <button type="button" id="btnOpenTutorial" class="btn-help-icon" aria-label="使い方・チュートリアルを開く" title="あそびかた（チュートリアル）">?</button>
         </div>
       </div>
 
@@ -390,6 +391,72 @@
       </div>
 
       <p id="dataModalStatus" class="status-message" role="status"></p>
+    </div>
+  </div>
+
+  <!-- チュートリアルモーダル -->
+  <div id="tutorialModal" class="modal-overlay" hidden aria-hidden="true">
+    <div class="modal-dialog modal-dialog--tutorial" role="dialog" aria-modal="true" aria-labelledby="tutorialModalTitle">
+      <button type="button" id="btnCloseTutorialModal" class="modal-close" aria-label="チュートリアルを閉じる">×</button>
+      <div class="tutorial-header">
+        <span class="tutorial-badge">✦ TUTORIAL GUIDE ✦</span>
+        <h2 id="tutorialModalTitle" class="tutorial-title">ようこそ！アイカツ！カード管理へ</h2>
+        <p class="tutorial-lead">カードの所持管理や検索がかんたんにできる、あなただけのマイバインダーです♪</p>
+      </div>
+
+      <div class="tutorial-steps">
+        <section class="tutorial-card tutorial-card--manage">
+          <div class="tutorial-card__head">
+            <span class="tutorial-step-pill tutorial-step-pill--pink">♥ Step 1</span>
+            <h3>カード管理のしかた</h3>
+          </div>
+          <ul class="tutorial-list">
+            <li>カードの <strong>「＋」「−」</strong> や <strong>「未所持 / 所持済」</strong> で枚数を登録できます。</li>
+            <li><strong>「☆」ボタン</strong> を押すとお気に入りに登録できます。</li>
+            <li>カード画像をタップすると<strong>拡大表示・裏面の確認</strong>ができます。</li>
+            <li>上部の <strong>「チェッカー」「バインダー」「通常カラー」</strong> で見た目も切り替えられます。</li>
+          </ul>
+        </section>
+
+        <section class="tutorial-card tutorial-card--search">
+          <div class="tutorial-card__head">
+            <span class="tutorial-step-pill tutorial-step-pill--blue">✦ Step 2</span>
+            <h3>検索・絞り込みのしかた</h3>
+          </div>
+          <ul class="tutorial-list">
+            <li><strong>キーワード欄</strong>にカード名や番号（例: <code>EP-001</code>）を入れてすぐ検索！</li>
+            <li><strong>シリーズ・所持状態（未所持 / ダブり等）・★お気に入り</strong>で絞り込めます。</li>
+            <li><strong>「✦ くわしくさがす」</strong>を開くと、タイプ・レアリティ・ブランドでも探せます。</li>
+            <li>上部の丸いゲージで<strong>全体のコンプ率</strong>と<strong>絞り込み中のコンプ率</strong>がわかります♪</li>
+          </ul>
+        </section>
+
+        <section class="tutorial-card tutorial-card--warning">
+          <div class="tutorial-card__head">
+            <span class="tutorial-step-pill tutorial-step-pill--warn">⚠ 大切なお知らせ</span>
+            <h3>データが消える場合について</h3>
+          </div>
+          <p class="tutorial-warn-text">
+            登録したカード枚数やお気に入りは、<strong>お使いのブラウザ内（ローカル）</strong>に保存されます。<br>
+            <strong>サイト履歴の削除・キャッシュクリア・閲覧データの消去</strong>を行うと、<strong>登録したカードデータもすべて消えてしまいます！</strong>
+          </p>
+          <p class="tutorial-warn-tip">
+            ✦ 機種変更やブラウザ整理の前に、画面上部の<strong>「保存」</strong>や<strong>「データ管理」</strong>からバックアップファイルを保存しておくのがおすすめです。
+          </p>
+        </section>
+      </div>
+
+      <div class="tutorial-footer">
+        <label class="tutorial-reopen-check">
+          <input type="checkbox" id="chkTutorialAutoShow">
+          <span class="tutorial-reopen-check__box" aria-hidden="true"></span>
+          <span class="tutorial-reopen-check__label">再度サイトを開いたときもチュートリアルを表示する</span>
+        </label>
+        <div class="tutorial-footer-actions">
+          <span class="tutorial-hint">※ いつでも右上の「？」ボタンから見返せます</span>
+          <button type="button" id="btnStartFromTutorial" class="btn btn-primary tutorial-start-btn">♥ わかった！はじめる</button>
+        </div>
+      </div>
     </div>
   </div>
 

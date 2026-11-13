@@ -354,6 +354,36 @@ body {
   font-size: 0.76rem;
 }
 
+.btn-help-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid #f7a6cf;
+  background: linear-gradient(135deg, #fff 0%, #fff0f7 100%);
+  color: var(--pink-dark);
+  font-size: 0.96rem;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(255, 79, 163, 0.16);
+  transition: transform 0.14s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn-help-icon:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #ff4fa3 0%, #ff79b8 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 3px 10px rgba(255, 79, 163, 0.3);
+}
+
+.btn-help-icon:active {
+  transform: scale(0.95);
+}
+
 @media (max-width: 768px) {
   .app-header {
     padding: 8px 10px;
@@ -393,6 +423,11 @@ body {
   .header-actions .btn {
     padding: 3px 8px;
     font-size: 0.7rem;
+  }
+  .btn-help-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 0.8rem;
   }
   header.app-header .stats-dashboard {
     display: grid;

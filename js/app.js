@@ -41,28 +41,30 @@
       await this._storage.init();
       this._applyDisplayMode(this._storage.getDisplayMode());
 
+      // 先に初期描画・同期を済ませてから初回チュートリアルを表示する
       const savedMaster = this._storage.loadCustomMasterData();
       if (savedMaster) {
         this._applyMasterData(savedMaster, false);
         this._setSyncBadge('追加カード図鑑を表示中', 'custom');
-        return;
-      }
-
-      // キャッシュまたは内蔵カタログで即座に初期描画し、通信待ちによる空白表示を防ぐ
-      const cachedOfficial = this._storage.loadOfficialCache();
-      const initialCatalog =
-        cachedOfficial ||
-        this._dataService.FALLBACK_CATALOG_DATA ||
-        this._dataService.DEFAULT_MASTER_DATA;
-      if (initialCatalog) {
-        try {
-          this._applyMasterData(initialCatalog, false);
-        } catch (_e) {
-          // 初期データ破損時は後続の同期処理で回復
+      } else {
+        const cachedOfficial = this._storage.loadOfficialCache();
+        const initialCatalog =
+          cachedOfficial ||
+          this._dataService.FALLBACK_CATALOG_DATA ||
+          this._dataService.DEFAULT_MASTER_DATA;
+        if (initialCatalog) {
+          try {
+            this._applyMasterData(initialCatalog, false);
+          } catch (_e) {
+            // 初期データ破損時は後続の同期処理で回復
+          }
         }
+        await this.syncFromOfficialSite();
       }
 
-      await this.syncFromOfficialSite();
+      if (this._storage.shouldShowTutorial()) {
+        this._openTutorialModal();
+      }
     }
 
     async syncFromOfficialSite() {
@@ -172,7 +174,13 @@
         textareaUserStateJson: byId('textareaUserStateJson'),
         btnApplyUserStateJson: byId('btnApplyUserStateJson'),
         btnClearUserState: byId('btnClearUserState'),
-        dataModalStatus: byId('dataModalStatus')
+        dataModalStatus: byId('dataModalStatus'),
+
+        btnOpenTutorial: byId('btnOpenTutorial'),
+        tutorialModal: byId('tutorialModal'),
+        btnCloseTutorialModal: byId('btnCloseTutorialModal'),
+        btnStartFromTutorial: byId('btnStartFromTutorial'),
+        chkTutorialAutoShow: byId('chkTutorialAutoShow')
       };
     }
 
@@ -344,6 +352,18 @@
 
     _syncModalState(card) {
       modalController.syncModalState(this, card);
+    }
+
+    _openTutorialModal() {
+      if (typeof modalController.openTutorialModal === 'function') {
+        modalController.openTutorialModal(this);
+      }
+    }
+
+    _closeTutorialModal() {
+      if (typeof modalController.closeTutorialModal === 'function') {
+        modalController.closeTutorialModal(this);
+      }
     }
 
     _downloadJson(jsonString, fileName) {
