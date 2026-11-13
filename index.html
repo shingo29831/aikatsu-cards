@@ -13,18 +13,18 @@
     <header class="app-header">
       <div class="header-inner">
         <div class="brand-Area">
-          <span class="brand-badge">DCD AIKATSU! ENCORE</span>
-          <h1 class="app-title">アイカツ！アンコール カード管理</h1>
+          <span class="brand-badge">✦ AIKATSU! ENCORE ✦</span>
+          <h1 class="app-title">アイカツ！カード管理</h1>
         </div>
         <div class="header-actions">
-          <span id="syncStatusBadge" class="sync-badge" data-state="info">カード一覧を準備中...</span>
-          <button type="button" id="btnSyncOfficial" class="btn btn-outline">最新カードに更新</button>
-          <button type="button" id="btnQuickExportOwned" class="btn btn-outline">所持データを保存</button>
+          <span id="syncStatusBadge" class="sync-badge" data-state="info">準備中...</span>
+          <button type="button" id="btnSyncOfficial" class="btn btn-outline">↻ カード更新</button>
+          <button type="button" id="btnQuickExportOwned" class="btn btn-outline">保存</button>
           <label class="btn btn-outline file-label">
-            所持データを復元
+            復元
             <input type="file" id="inputQuickImportOwned" accept=".json,application/json" hidden>
           </label>
-          <button type="button" id="btnOpenDataModal" class="btn btn-secondary">データの保存・引き継ぎ</button>
+          <button type="button" id="btnOpenDataModal" class="btn btn-secondary">データ管理</button>
         </div>
       </div>
 
@@ -38,11 +38,11 @@
             <span id="statCompRate" class="stat-rate">0.0%</span>
           </div>
           <div class="stat-head">
-            <span class="stat-label">全体のコンプリート率</span>
+            <span class="stat-label">全体コンプ率</span>
           </div>
           <div class="stat-foot">
-            <span>集めた種類: <strong id="statOwnedUnique">0</strong> / <span id="statTotalUnique">0</span> 種</span>
-            <span>持っている合計: <strong id="statTotalCopies">0</strong> 枚</span>
+            <span><strong id="statOwnedUnique">0</strong>/<span id="statTotalUnique">0</span>種</span>
+            <span>計<strong id="statTotalCopies">0</strong>枚</span>
           </div>
         </div>
 
@@ -55,11 +55,11 @@
             <span id="statFilteredRate" class="stat-rate stat-rate--sub">0.0%</span>
           </div>
           <div class="stat-head">
-            <span class="stat-label">絞り込み中のコンプリート率</span>
+            <span class="stat-label">絞込コンプ率</span>
           </div>
           <div class="stat-foot">
-            <span>この条件で所持: <strong id="statFilteredOwned">0</strong> / <span id="statFilteredTotal">0</span> 種</span>
-            <span>お気に入り: <strong id="statFavoriteCount">0</strong> 種</span>
+            <span><strong id="statFilteredOwned">0</strong>/<span id="statFilteredTotal">0</span>種</span>
+            <span>★<strong id="statFavoriteCount">0</strong>種</span>
           </div>
         </div>
       </section>
@@ -70,24 +70,24 @@
         <form id="searchForm" class="search-form" onsubmit="return false;">
           <div class="search-row search-row--top">
             <div class="form-group form-group--keyword">
-              <label for="filterKeyword" class="form-label">キーワード検索</label>
-              <input id="filterKeyword" type="search" class="form-input" placeholder="カード名、カード番号 (例: EP-001)、入手方法など" maxlength="200">
+              <label for="filterKeyword" class="form-label">キーワード</label>
+              <input id="filterKeyword" type="search" class="form-input" placeholder="カード名・番号 (例: EP-001)" maxlength="200">
             </div>
 
             <div class="form-group">
-              <label for="filterSeries" class="form-label">弾数 / シリーズ</label>
+              <label for="filterSeries" class="form-label">シリーズ</label>
               <select id="filterSeries" class="form-select">
                 <option value="">すべて</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="filterOwnership" class="form-label">持っているか</label>
+              <label for="filterOwnership" class="form-label">所持状態</label>
               <select id="filterOwnership" class="form-select">
-                <option value="all">すべて表示</option>
-                <option value="owned">持っているカードのみ (1枚以上)</option>
-                <option value="unowned">持っていないカードのみ (0枚)</option>
-                <option value="duplicate">ダブりのみ (2枚以上)</option>
+                <option value="all">すべて</option>
+                <option value="owned">所持のみ (1枚〜)</option>
+                <option value="unowned">未所持のみ (0枚)</option>
+                <option value="duplicate">ダブり (2枚〜)</option>
               </select>
             </div>
 
@@ -95,14 +95,14 @@
               <span class="form-label">お気に入り</span>
               <label class="toggle-check">
                 <input type="checkbox" id="filterFavorite">
-                <span class="toggle-check__box">★ お気に入りのみ</span>
+                <span class="toggle-check__box">★ お気に入り</span>
               </label>
             </div>
           </div>
 
           <div class="search-detail-toggle-wrap">
             <button type="button" id="btnToggleDetail" class="btn-detail-toggle" aria-expanded="true">
-              <span>くわしくさがす（タイプ・レアリティ・カテゴリ・ブランド）</span>
+              <span>✦ くわしくさがす</span>
               <span class="toggle-icon">▼</span>
             </button>
           </div>
@@ -160,13 +160,13 @@
           </div>
 
           <div class="search-actions">
-            <button type="button" id="btnResetFilters" class="btn btn-outline">条件をクリア</button>
+            <button type="button" id="btnResetFilters" class="btn btn-outline btn-xs">条件クリア</button>
           </div>
         </form>
       </section>
 
       <section class="result-bar" aria-label="検索結果と並び替え">
-        <p class="result-count">見つかったカード <strong id="resultCountNum">0</strong> 枚</p>
+        <p class="result-count">全 <strong id="resultCountNum">0</strong> 枚</p>
         <div class="result-controls">
           <div class="display-mode-group" role="group" aria-label="表示モード切替">
             <button type="button" class="btn-mode js-display-mode-btn is-active" data-mode="checker" aria-pressed="true">チェッカー</button>
