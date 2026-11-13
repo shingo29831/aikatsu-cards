@@ -195,7 +195,7 @@
         const imgEsc = escapeHtml(card.imageUrl);
 
         return `
-          <li class="${itemClasses}" data-card-id="${idEsc}">
+          <li class="${itemClasses}" data-card-id="${idEsc}" itemscope itemtype="https://schema.org/Thing">
             <div class="card-thumb-btn js-open-modal" role="button" tabindex="0" aria-label="${nameEsc} の詳細を表示">
               <span class="card-owned-badge js-btn-toggle-own ${isOwned ? 'is-owned' : ''}" title="クリックで所持状態を切り替え">
                 ${isOwned ? `所持 ×${count}` : '未所持'}
@@ -203,16 +203,16 @@
               <button type="button" class="card-fav-btn js-btn-fav ${isFav ? 'is-active' : ''}" aria-label="お気に入り" aria-pressed="${isFav}">
                 ${isFav ? '★' : '☆'}
               </button>
-              <img src="${imgEsc}" alt="${nameEsc}" class="card-thumb-img" loading="lazy">
+              <img src="${imgEsc}" alt="${nameEsc}" class="card-thumb-img" loading="lazy" decoding="async" itemprop="image">
             </div>
             <div class="card-body">
               <div class="card-meta-row">
-                <span class="card-number-badge">${numEsc}</span>
+                <span class="card-number-badge" itemprop="identifier">${numEsc}</span>
                 <span class="rarity-badge rarity-badge--${rarityEsc}">${rarityEsc}</span>
                 ${typeEsc ? `<span class="type-badge type-badge--${typeEsc}">${typeEsc}</span>` : ''}
               </div>
-              <h3 class="card-title js-open-modal">${nameEsc}</h3>
-              <p class="card-subinfo">${brandEsc} / ${catEsc}</p>
+              <h3 class="card-title js-open-modal" itemprop="name">${nameEsc}</h3>
+              <p class="card-subinfo" itemprop="description">${brandEsc} / ${catEsc}</p>
               <div class="card-footer">
                 <button type="button" class="btn btn-outline btn-xs js-btn-toggle-own">
                   ${isOwned ? '所持済' : '未所持'}
@@ -232,12 +232,107 @@
     el.cardGrid.innerHTML = html;
   }
 
+  /**
+   * 検索エンジン向けに正規URLおよびJSON-LD構造化データを動的同期する
+   * @param {Array<Object>} allCards
+   * @param {Array<{id: string, name: string}>} seriesList
+   */
+  function updateSeoMetadata(allCards, seriesList) {
+    if (typeof document === 'undefined') return;
+
+    const loc = typeof window !== 'undefined' && window.location ? window.location : null;
+    const isHttp = loc && (loc.protocol === 'http:' || loc.protocol === 'https:');
+    const canonicalUrl = isHttp ? `${loc.origin}${loc.pathname}` : '';
+
+    if (canonicalUrl && document.head) {
+      let canonicalEl = document.querySelector('link[rel="canonical"]');
+      if (!canonicalEl) {
+        canonicalEl = document.createElement('link');
+        canonicalEl.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonicalEl);
+      }
+      canonicalEl.setAttribute('href', canonicalUrl);
+
+      let ogUrlEl = document.querySelector('meta[property="og:url"]');
+      if (!ogUrlEl) {
+        ogUrlEl = document.createElement('meta');
+        ogUrlEl.setAttribute('property', 'og:url');
+        document.head.appendChild(ogUrlEl);
+      }
+      ogUrlEl.setAttribute('content', canonicalUrl);
+    }
+
+    const jsonLdEl = document.getElementById('structuredDataJsonLd');
+    if (!jsonLdEl) return;
+
+    const cards = Array.isArray(allCards) ? allCards : [];
+    const seriesNames = (Array.isArray(seriesList) ? seriesList : [])
+      .map((s) => s && s.name)
+      .filter(Boolean);
+
+    const graph = [
+      {
+        '@type': 'WebSite',
+        name: 'アイカツ！アンコール カードコレクション管理',
+        alternateName: ['AIKATSU! ENCORE カード管理', 'アイカツ！カード管理'],
+        inLanguage: 'ja',
+        ...(canonicalUrl ? { url: canonicalUrl } : {}),
+        description:
+          'アイカツ！アンコール（AIKATSU! ENCORE）のカード一覧・所持チェッカー・コレクション管理Webアプリケーション。'
+      },
+      {
+        '@type': 'WebApplication',
+        name: 'アイカツ！アンコール カードコレクション管理',
+        applicationCategory: 'GameApplication',
+        operatingSystem: 'All',
+        inLanguage: 'ja',
+        ...(canonicalUrl ? { url: canonicalUrl } : {}),
+        browserRequirements: 'Requires JavaScript. Requires HTML5.',
+        description:
+          'アイカツ！アンコールのカード検索、所持枚数カウント、全体・絞り込みコンプリート率計算、チェッカー・バインダー表示切替、JSONバックアップに対応したコレクション管理アプリ。',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'JPY'
+        }
+      },
+      {
+        '@type': 'ItemList',
+        name: 'アイカツ！アンコール カード一覧',
+        description:
+          seriesNames.length > 0
+            ? `収録シリーズ: ${seriesNames.join(' / ')}`
+            : 'アイカツ！アンコール 収録カードリスト',
+        numberOfItems: cards.length,
+        itemListElement: cards.map((card, idx) => ({
+          '@type': 'ListItem',
+          position: idx + 1,
+          item: {
+            '@type': 'Thing',
+            identifier: card.number || card.id,
+            name: card.name,
+            ...(card.imageUrl ? { image: card.imageUrl } : {}),
+            description: [card.seriesName, card.rarity, card.type, card.brand, card.category]
+              .filter(Boolean)
+              .join(' / ')
+          }
+        }))
+      }
+    ];
+
+    jsonLdEl.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': graph
+    });
+  }
+
   global.AikatsuUiRenderer = {
     escapeHtml,
     updateGaugeProgress,
     renderStatsDashboard,
     populateSeriesSelect,
     applyDisplayModeUI,
-    renderCardGrid
+    renderCardGrid,
+    updateSeoMetadata
   };
 })(typeof window !== 'undefined' ? window : globalThis);

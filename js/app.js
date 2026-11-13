@@ -293,6 +293,9 @@
 
       this._populateSeriesFilter();
       this._refreshView();
+      if (typeof uiRenderer.updateSeoMetadata === 'function') {
+        uiRenderer.updateSeoMetadata(this._allCards, this._seriesList);
+      }
     }
 
     _populateSeriesFilter() {

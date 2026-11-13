@@ -4,17 +4,83 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>アイカツ！アンコール カードコレクション管理</title>
+  <meta name="description" content="アイカツ！アンコール（AIKATSU! ENCORE）のカード一覧・所持状況チェッカー・コレクション管理Webアプリ。第1弾やプロモーションカードの検索、レアリティ・タイプ・ブランド・カテゴリ別の絞り込み、コンプリート率の自動計算、バインダー表示、データのバックアップ保存・復元に対応しています。">
+  <meta name="keywords" content="アイカツ,アイカツ！アンコール,AIKATSU! ENCORE,アイカツカード,カード一覧,カードリスト,所持チェッカー,コレクション管理,カード図鑑,コンプリート率,バインダー">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="application-name" content="アイカツ！アンコール カードコレクション管理">
+  <meta name="apple-mobile-web-app-title" content="アイカツ！カード管理">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#ff4fa3">
+  <meta name="color-scheme" content="light">
+  <meta name="format-detection" content="telephone=no">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:site_name" content="アイカツ！アンコール カードコレクション管理">
+  <meta property="og:title" content="アイカツ！アンコール カードコレクション管理">
+  <meta property="og:description" content="アイカツ！アンコール（AIKATSU! ENCORE）のカード一覧検索・所持枚数チェッカー・コンプリート率管理ができるWebコレクションツール。">
+  <meta property="og:image" content="https://www.aikatsu.com/ac/encore/assets/img/cardlist/ep1/1_866197_f.webp">
+  <meta property="og:image:alt" content="アイカツ！アンコール カードコレクション管理">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="アイカツ！アンコール カードコレクション管理">
+  <meta name="twitter:description" content="アイカツ！アンコール（AIKATSU! ENCORE）のカード一覧検索・所持枚数チェッカー・コンプリート率管理ができるWebコレクションツール。">
+  <meta name="twitter:image" content="https://www.aikatsu.com/ac/encore/assets/img/cardlist/ep1/1_866197_f.webp">
+
+  <link rel="preconnect" href="https://www.aikatsu.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.aikatsu.com">
+
+  <script type="application/ld+json" id="structuredDataJsonLd">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "アイカツ！アンコール カードコレクション管理",
+        "alternateName": ["AIKATSU! ENCORE カード管理", "アイカツ！カード管理"],
+        "inLanguage": "ja",
+        "description": "アイカツ！アンコール（AIKATSU! ENCORE）のカード一覧・所持チェッカー・コレクション管理Webアプリケーション。"
+      },
+      {
+        "@type": "WebApplication",
+        "name": "アイカツ！アンコール カードコレクション管理",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "All",
+        "inLanguage": "ja",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "description": "アイカツ！アンコールのカード検索、所持枚数カウント、全体・絞り込みコンプリート率計算、チェッカー・バインダー表示切替、JSONバックアップに対応したコレクション管理アプリ。",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "JPY"
+        },
+        "featureList": [
+          "アイカツ！アンコール カード一覧・キーワード検索",
+          "シリーズ・レアリティ・タイプ・カテゴリ・ブランド別フィルタリング",
+          "所持枚数・未所持・ダブり・お気に入り管理",
+          "全体コンプリート率・絞り込みコンプリート率のリアルタイム計算",
+          "チェッカー・バインダー・通常カラーの3モード表示切替",
+          "カード表面・裏面のフリップ詳細表示",
+          "所持データのJSONファイル保存・復元バックアップ"
+        ]
+      }
+    ]
+  }
+  </script>
+
   <link rel="stylesheet" href="css/style.css?v=20261113">
   <link rel="stylesheet" href="css/search-grid.css?v=20261113">
   <link rel="stylesheet" href="css/modals.css?v=20261113">
 </head>
 <body>
-  <div class="app-wrapper">
+  <div class="app-wrapper" itemscope itemtype="https://schema.org/CollectionPage">
     <header class="app-header">
       <div class="header-inner">
         <div class="brand-Area">
           <span class="brand-badge">✦ AIKATSU! ENCORE ✦</span>
-          <h1 class="app-title">アイカツ！カード管理</h1>
+          <h1 class="app-title" itemprop="headline">アイカツ！カード管理</h1>
         </div>
         <div class="header-actions">
           <button type="button" id="btnSyncOfficial" class="btn btn-outline btn-sync" data-state="info" title="準備中..." aria-label="カード更新（準備中...）">
@@ -81,7 +147,7 @@
 
     <main class="main-container">
       <section class="search-panel" aria-label="カード検索・絞り込み">
-        <form id="searchForm" class="search-form" onsubmit="return false;">
+        <form id="searchForm" class="search-form" role="search" aria-label="カード検索フォーム" onsubmit="return false;">
           <div class="search-row search-row--top">
             <div class="form-group form-group--keyword">
               <label for="filterKeyword" class="form-label">キーワード</label>
@@ -199,7 +265,7 @@
       </section>
 
       <section class="card-grid-section" aria-label="カード一覧">
-        <ul id="cardGrid" class="card-grid"></ul>
+        <ul id="cardGrid" class="card-grid" itemscope itemtype="https://schema.org/ItemList" aria-live="polite"></ul>
         <div id="emptyState" class="empty-state" hidden>
           <p>条件に一致するカードが見つかりませんでした。</p>
         </div>
@@ -216,11 +282,11 @@
           <div id="modalFlipContainer" class="flip-container">
             <div class="flip-face flip-face--front">
               <span class="face-badge">表面</span>
-              <img id="modalImgFront" src="" alt="カード表面" class="card-modal-img">
+              <img id="modalImgFront" src="" alt="カード表面" class="card-modal-img" decoding="async">
             </div>
             <div class="flip-face flip-face--back">
               <span class="face-badge">裏面</span>
-              <img id="modalImgBack" src="" alt="カード裏面" class="card-modal-img">
+              <img id="modalImgBack" src="" alt="カード裏面" class="card-modal-img" decoding="async">
             </div>
           </div>
           <div class="card-modal-visual-controls">
@@ -326,6 +392,13 @@
       <p id="dataModalStatus" class="status-message" role="status"></p>
     </div>
   </div>
+
+  <noscript>
+    <section aria-label="アプリケーション概要">
+      <h2>アイカツ！アンコール カードコレクション管理について</h2>
+      <p>アイカツ！アンコール（AIKATSU! ENCORE）の第1弾・プロモーションカード一覧の検索、所持枚数チェッカー、コンプリート率計算、バインダー表示、およびバックアップ保存・復元を行えるカード図鑑・コレクション管理Webアプリケーションです。ご利用にはJavaScriptを有効にしてください。</p>
+    </section>
+  </noscript>
 
   <script src="js/catalog-data.js"></script>
   <script src="js/official-sync.js"></script>
