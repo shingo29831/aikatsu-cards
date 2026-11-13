@@ -34,7 +34,6 @@
       this._touchStartX = 0;
       this._touchStartY = 0;
       this._cacheElements();
-      this._initResponsiveSearchState();
       this._bindEvents();
     }
 
@@ -98,14 +97,6 @@
       this.el.btnSyncOfficial.dataset.state = normalizedState;
       this.el.btnSyncOfficial.setAttribute('aria-label', message ? `カード更新（${message}）` : 'カード更新');
       this.el.btnSyncOfficial.title = message;
-    }
-
-    _initResponsiveSearchState() {
-      // スマホ画面では初期状態で詳細検索を折りたたんでカード一覧の視認領域を確保する
-      if (global.innerWidth <= 768 && this.el.searchDetailArea && this.el.btnToggleDetail) {
-        this.el.searchDetailArea.classList.remove('is-open');
-        this.el.btnToggleDetail.setAttribute('aria-expanded', 'false');
-      }
     }
 
     _cacheElements() {
