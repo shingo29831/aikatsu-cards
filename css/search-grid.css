@@ -421,37 +421,60 @@
   font-size: 1rem;
 }
 
-.card-grid.is-binder-view .card-footer .counter-control {
+.card-footer .counter-control {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
   gap: 6px;
-  padding: 3px 6px;
+  padding: 4px 6px;
+}
+
+.card-footer .btn-counter {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 34px;
+  max-width: 68px;
+  height: 40px;
+  border-radius: 999px;
+  font-size: 1.2rem;
+}
+
+.card-footer .counter-value {
+  min-width: 28px;
+  font-size: 1.05rem;
+}
+
+.card-grid.is-binder-view .card-footer .counter-control {
+  gap: 4px;
+  padding: 3px 4px;
 }
 
 .card-grid.is-binder-view .card-footer .btn-counter {
-  width: 30px;
-  height: 30px;
-  font-size: 0.98rem;
+  min-width: 32px;
+  height: 36px;
+  font-size: 1.1rem;
 }
 
 .card-grid.is-binder-view .card-footer .counter-value {
-  min-width: 22px;
-  font-size: 0.94rem;
+  min-width: 24px;
+  font-size: 0.98rem;
 }
 
 @media (max-width: 768px) {
   .card-footer .counter-control {
-    gap: 6px;
-    padding: 3px 6px;
+    gap: 4px;
+    padding: 3px 4px;
   }
 
   .card-footer .btn-counter {
-    width: 30px;
-    height: 30px;
-    font-size: 0.98rem;
+    min-width: 32px;
+    height: 36px;
+    font-size: 1.1rem;
   }
 
   .card-footer .counter-value {
-    min-width: 22px;
-    font-size: 0.94rem;
+    min-width: 24px;
+    font-size: 0.98rem;
   }
 }
 
