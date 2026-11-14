@@ -241,7 +241,7 @@
   border: 2px solid #f7c6df;
   background: linear-gradient(180deg, #ffffff 0%, #fff9fc 100%);
   overflow-x: hidden;
-  padding-top: 26px;
+  padding-top: 24px;
 }
 
 .modal-dialog--tutorial::before {
@@ -257,8 +257,16 @@
 
 .tutorial-header {
   text-align: center;
-  margin-bottom: 16px;
-  padding-right: 12px;
+  margin-bottom: 14px;
+  padding: 0 28px 0 8px;
+}
+
+.tutorial-header-meta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .tutorial-badge {
@@ -270,40 +278,146 @@
   background: linear-gradient(135deg, #ff5da2 0%, #ff85c0 55%, #b57cff 100%);
   padding: 3px 12px;
   border-radius: 999px;
-  margin-bottom: 8px;
   box-shadow: 0 2px 6px rgba(255, 79, 163, 0.25);
 }
 
+.tutorial-page-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--pink-dark);
+  background: #fdeaf3;
+  border: 1px solid #f6bedb;
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
 .tutorial-title {
-  font-size: 1.32rem;
+  font-size: 1.26rem;
   font-weight: 800;
   color: var(--pink-dark);
   margin-bottom: 4px;
 }
 
 .tutorial-lead {
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.tutorial-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tutorial-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: #e7cde0;
+  cursor: pointer;
+  transition: width 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+}
+
+.tutorial-dot:hover {
+  background: #f09bc6;
+  transform: scale(1.1);
+}
+
+.tutorial-dot.is-active {
+  width: 28px;
+  background: linear-gradient(90deg, #ff4fa3 0%, #b57cff 100%);
+}
+
+.tutorial-pages {
+  min-height: 295px;
+  margin-bottom: 16px;
+}
+
+.tutorial-page {
+  display: none;
+}
+
+.tutorial-page.is-active {
+  display: block;
+  animation: tutorialFadeIn 0.2s ease-out;
+}
+
+@keyframes tutorialFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tutorial-page-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+}
+
+.tutorial-page-banner--pink {
+  background: #fff0f7;
+  border-color: #f8c5df;
+}
+
+.tutorial-page-banner--purple {
+  background: #f7f2ff;
+  border-color: #dec9fa;
+}
+
+.tutorial-page-banner--blue {
+  background: #f0f5ff;
+  border-color: #c7d7fb;
+}
+
+.tutorial-page-banner--warn {
+  background: #fff5ea;
+  border-color: #f6c989;
+}
+
+.tutorial-page-heading {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-main);
 }
 
 .tutorial-steps {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 10px;
 }
 
 .tutorial-card {
   border-radius: var(--radius-md);
-  padding: 13px 15px;
+  padding: 12px 14px;
   border: 1.5px solid var(--border-color);
   background: #fff;
   box-shadow: 0 2px 8px rgba(74, 34, 64, 0.05);
 }
 
 .tutorial-card--manage {
-  background: linear-gradient(135deg, #fff5fa 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #fff7fb 0%, #ffffff 100%);
   border-color: #f8bddb;
+}
+
+.tutorial-card--purple {
+  background: linear-gradient(135deg, #faf6ff 0%, #ffffff 100%);
+  border-color: #dec9fa;
 }
 
 .tutorial-card--search {
@@ -316,6 +430,11 @@
   border-color: #f6c36e;
 }
 
+.tutorial-card--safe {
+  background: linear-gradient(135deg, #f3fbf8 0%, #ffffff 100%);
+  border-color: #bce4d3;
+}
+
 .tutorial-card__head {
   display: flex;
   align-items: center;
@@ -323,8 +442,8 @@
   margin-bottom: 8px;
 }
 
-.tutorial-card__head h3 {
-  font-size: 0.98rem;
+.tutorial-card__head h4 {
+  font-size: 0.94rem;
   font-weight: 800;
   color: var(--text-main);
 }
@@ -335,7 +454,7 @@
   font-size: 0.72rem;
   font-weight: 800;
   color: #fff;
-  padding: 2px 9px;
+  padding: 2px 10px;
   border-radius: 999px;
   flex-shrink: 0;
 }
@@ -344,8 +463,12 @@
   background: linear-gradient(135deg, #ff4fa3 0%, #ff7eb9 100%);
 }
 
+.tutorial-step-pill--purple {
+  background: linear-gradient(135deg, #9b6bff 0%, #d16ba5 100%);
+}
+
 .tutorial-step-pill--blue {
-  background: linear-gradient(135deg, #6a89cc 0%, #9b6bff 100%);
+  background: linear-gradient(135deg, #5c7cfa 0%, #74b9ff 100%);
 }
 
 .tutorial-step-pill--warn {
@@ -356,8 +479,9 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   font-size: 0.84rem;
+  line-height: 1.5;
   color: var(--text-main);
 }
 
@@ -375,23 +499,89 @@
   font-size: 0.78rem;
 }
 
-.tutorial-card--search .tutorial-list li::before {
-  color: #6a89cc;
+.tutorial-card--purple .tutorial-list li::before {
+  color: #9b6bff;
 }
 
-.tutorial-list code {
+.tutorial-card--search .tutorial-list li::before {
+  color: #5c7cfa;
+}
+
+.tutorial-card--safe .tutorial-list li::before {
+  color: #20bf6b;
+}
+
+.tutorial-list code,
+.tutorial-kbd {
+  display: inline-block;
   background: rgba(255, 79, 163, 0.1);
   color: var(--pink-dark);
-  padding: 1px 5px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 700;
+  border: 1px solid rgba(255, 79, 163, 0.25);
+  padding: 0 6px;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.45;
+  vertical-align: baseline;
+}
+
+.tutorial-card--search .tutorial-list code {
+  background: rgba(92, 124, 250, 0.1);
+  color: #3b5bdb;
+  border-color: rgba(92, 124, 250, 0.25);
+}
+
+.tutorial-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tutorial-mode-item {
+  background: #fff;
+  border: 1px solid #eadcfb;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.tutorial-mode-item p {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-main);
+  margin-top: 5px;
+}
+
+.tutorial-mode-chip {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.tutorial-mode-chip--checker {
+  background: #ffebf5;
+  color: var(--pink-dark);
+  border: 1px solid #f5b6d5;
+}
+
+.tutorial-mode-chip--binder {
+  background: #f2ebff;
+  color: #6b46c1;
+  border: 1px solid #d5c1fa;
+}
+
+.tutorial-mode-chip--color {
+  background: #eaf6ff;
+  color: #1971c2;
+  border: 1px solid #b5dcfa;
 }
 
 .tutorial-warn-text {
   font-size: 0.84rem;
+  line-height: 1.55;
   color: #542d2d;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .tutorial-warn-text strong {
@@ -401,7 +591,7 @@
 .tutorial-warn-tip {
   font-size: 0.8rem;
   color: #6b4d2b;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
   padding: 6px 10px;
   border: 1px dashed #f3b862;
@@ -409,10 +599,18 @@
 
 .tutorial-footer {
   border-top: 1px dashed #eed5e5;
-  padding-top: 14px;
+  padding-top: 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.tutorial-footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .tutorial-reopen-check {
@@ -421,7 +619,7 @@
   gap: 8px;
   cursor: pointer;
   user-select: none;
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--text-main);
 }
@@ -463,17 +661,34 @@
   outline-offset: 2px;
 }
 
-.tutorial-footer-actions {
+.tutorial-hint {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.tutorial-nav-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
-.tutorial-hint {
-  font-size: 0.78rem;
-  color: var(--text-muted);
+.tutorial-nav-next-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.tutorial-nav-btn {
+  min-width: 112px;
+  padding: 8px 18px;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.tutorial-nav-btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
 }
 
 .tutorial-start-btn {
@@ -549,23 +764,35 @@
     gap: 10px;
   }
   .modal-dialog--tutorial {
-    padding: 22px 14px 16px;
+    padding: 20px 14px 16px;
+  }
+  .tutorial-header {
+    padding: 0 24px 0 0;
   }
   .tutorial-title {
-    font-size: 1.12rem;
+    font-size: 1.1rem;
+  }
+  .tutorial-pages {
+    min-height: 0;
+  }
+  .tutorial-page-banner {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tutorial-mode-grid {
+    grid-template-columns: 1fr;
   }
   .tutorial-card {
     padding: 10px 12px;
   }
-  .tutorial-footer-actions {
-    flex-direction: column-reverse;
-    align-items: stretch;
+  .tutorial-footer-top {
+    flex-direction: column;
+    align-items: flex-start;
   }
+  .tutorial-nav-btn,
   .tutorial-start-btn {
-    width: 100%;
-  }
-  .tutorial-hint {
-    text-align: center;
+    padding: 8px 14px;
+    font-size: 0.84rem;
   }
 }
 

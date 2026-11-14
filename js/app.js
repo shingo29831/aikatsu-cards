@@ -31,6 +31,7 @@
       this._seriesList = [];
       this._rawMasterStructure = null;
       this._activeModalIndex = -1;
+      this._tutorialPageIndex = 0;
       this._touchStartX = 0;
       this._touchStartY = 0;
       this._cacheElements();
@@ -178,7 +179,14 @@
 
         btnOpenTutorial: byId('btnOpenTutorial'),
         tutorialModal: byId('tutorialModal'),
+        tutorialDialog: document.querySelector('#tutorialModal .modal-dialog--tutorial'),
+        tutorialPagesContainer: byId('tutorialPages'),
+        tutorialPages: document.querySelectorAll('#tutorialPages .tutorial-page'),
+        tutorialDots: document.querySelectorAll('#tutorialStepDots .tutorial-dot'),
+        tutorialPageIndicator: byId('tutorialPageIndicator'),
         btnCloseTutorialModal: byId('btnCloseTutorialModal'),
+        btnTutorialPrev: byId('btnTutorialPrev'),
+        btnTutorialNext: byId('btnTutorialNext'),
         btnStartFromTutorial: byId('btnStartFromTutorial'),
         chkTutorialHideNext: byId('chkTutorialHideNext')
       };

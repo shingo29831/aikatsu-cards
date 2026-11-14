@@ -158,6 +158,70 @@
   }
 
   /**
+   * チュートリアルモーダルの表示ページを切り替え、ナビゲーションUIを同期する
+   * @param {Object} app
+   * @param {number} pageIndex
+   */
+  function setTutorialPage(app, pageIndex) {
+    const el = app.el;
+    const pages = el.tutorialPages ? Array.from(el.tutorialPages) : [];
+    const total = pages.length;
+    if (total === 0) return;
+
+    const clamped = Math.max(0, Math.min(pageIndex, total - 1));
+    app._tutorialPageIndex = clamped;
+
+    pages.forEach((pageEl, idx) => {
+      const isActive = idx === clamped;
+      pageEl.hidden = !isActive;
+      pageEl.classList.toggle('is-active', isActive);
+    });
+
+    if (el.tutorialDots) {
+      Array.from(el.tutorialDots).forEach((dotEl, idx) => {
+        const isActive = idx === clamped;
+        dotEl.classList.toggle('is-active', isActive);
+        if (isActive) {
+          dotEl.setAttribute('aria-current', 'step');
+        } else {
+          dotEl.removeAttribute('aria-current');
+        }
+      });
+    }
+
+    if (el.tutorialPageIndicator) {
+      el.tutorialPageIndicator.textContent = `${clamped + 1} / ${total}`;
+    }
+
+    const isFirst = clamped === 0;
+    const isLast = clamped === total - 1;
+
+    if (el.btnTutorialPrev) {
+      el.btnTutorialPrev.disabled = isFirst;
+    }
+    if (el.btnTutorialNext) {
+      el.btnTutorialNext.hidden = isLast;
+    }
+    if (el.btnStartFromTutorial) {
+      el.btnStartFromTutorial.hidden = !isLast;
+    }
+
+    if (el.tutorialDialog) {
+      el.tutorialDialog.scrollTop = 0;
+    }
+  }
+
+  /**
+   * チュートリアルモーダル内のページを前後に移動する
+   * @param {Object} app
+   * @param {number} delta
+   */
+  function stepTutorialPage(app, delta) {
+    const current = Number.isFinite(app._tutorialPageIndex) ? app._tutorialPageIndex : 0;
+    setTutorialPage(app, current + delta);
+  }
+
+  /**
    * チュートリアルモーダルを開く
    * @param {Object} app
    */
@@ -167,6 +231,7 @@
     if (el.chkTutorialHideNext) {
       el.chkTutorialHideNext.checked = app._storage.getHideTutorialOnStartup();
     }
+    setTutorialPage(app, 0);
     el.tutorialModal.hidden = false;
     el.tutorialModal.setAttribute('aria-hidden', 'false');
   }
@@ -358,6 +423,49 @@
         closeTutorialModal(app);
       });
     }
+    if (el.btnTutorialPrev) {
+      el.btnTutorialPrev.addEventListener('click', () => {
+        stepTutorialPage(app, -1);
+      });
+    }
+    if (el.btnTutorialNext) {
+      el.btnTutorialNext.addEventListener('click', () => {
+        stepTutorialPage(app, 1);
+      });
+    }
+    if (el.tutorialDots) {
+      Array.from(el.tutorialDots).forEach((dotEl, idx) => {
+        dotEl.addEventListener('click', () => {
+          const targetIdx = Number(dotEl.dataset.tutorialDot);
+          setTutorialPage(app, Number.isFinite(targetIdx) ? targetIdx : idx);
+        });
+      });
+    }
+    if (el.tutorialPagesContainer) {
+      let tutorialTouchX = 0;
+      let tutorialTouchY = 0;
+      el.tutorialPagesContainer.addEventListener(
+        'touchstart',
+        (e) => {
+          if (!e.touches || e.touches.length !== 1) return;
+          tutorialTouchX = e.touches[0].clientX;
+          tutorialTouchY = e.touches[0].clientY;
+        },
+        { passive: true }
+      );
+      el.tutorialPagesContainer.addEventListener(
+        'touchend',
+        (e) => {
+          if (!e.changedTouches || e.changedTouches.length !== 1) return;
+          const dx = e.changedTouches[0].clientX - tutorialTouchX;
+          const dy = e.changedTouches[0].clientY - tutorialTouchY;
+          if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+            stepTutorialPage(app, dx < 0 ? 1 : -1);
+          }
+        },
+        { passive: true }
+      );
+    }
     if (el.btnStartFromTutorial) {
       el.btnStartFromTutorial.addEventListener('click', () => {
         closeTutorialModal(app);
@@ -376,13 +484,31 @@
 
     if (typeof document !== 'undefined') {
       document.addEventListener('keydown', (e) => {
-        if (e.key !== 'Escape') return;
-        if (el.cardDetailModal && !el.cardDetailModal.hidden) {
-          app._closeCardModal();
-        } else if (el.dataManageModal && !el.dataManageModal.hidden) {
-          el.dataManageModal.hidden = true;
-        } else if (el.tutorialModal && !el.tutorialModal.hidden) {
-          closeTutorialModal(app);
+        if (e.key === 'Escape') {
+          if (el.cardDetailModal && !el.cardDetailModal.hidden) {
+            app._closeCardModal();
+          } else if (el.dataManageModal && !el.dataManageModal.hidden) {
+            el.dataManageModal.hidden = true;
+          } else if (el.tutorialModal && !el.tutorialModal.hidden) {
+            closeTutorialModal(app);
+          }
+          return;
+        }
+
+        if (
+          el.tutorialModal &&
+          !el.tutorialModal.hidden &&
+          !e.metaKey &&
+          !e.ctrlKey &&
+          !e.altKey
+        ) {
+          const tagName = e.target && e.target.tagName ? e.target.tagName : '';
+          if (tagName === 'TEXTAREA' || tagName === 'SELECT') return;
+          if (e.key === 'ArrowLeft') {
+            stepTutorialPage(app, -1);
+          } else if (e.key === 'ArrowRight') {
+            stepTutorialPage(app, 1);
+          }
         }
       });
     }
@@ -396,6 +522,8 @@
     downloadJson,
     formatUserFriendlyError,
     handleUserStateFileImport,
+    setTutorialPage,
+    stepTutorialPage,
     openTutorialModal,
     closeTutorialModal,
     bindModalEvents

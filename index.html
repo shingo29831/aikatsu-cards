@@ -399,62 +399,171 @@
     <div class="modal-dialog modal-dialog--tutorial" role="dialog" aria-modal="true" aria-labelledby="tutorialModalTitle">
       <button type="button" id="btnCloseTutorialModal" class="modal-close" aria-label="チュートリアルを閉じる">×</button>
       <div class="tutorial-header">
-        <span class="tutorial-badge">✦ TUTORIAL GUIDE ✦</span>
+        <div class="tutorial-header-meta">
+          <span class="tutorial-badge">✦ TUTORIAL GUIDE ✦</span>
+          <span id="tutorialPageIndicator" class="tutorial-page-indicator" aria-live="polite">1 / 4</span>
+        </div>
         <h2 id="tutorialModalTitle" class="tutorial-title">ようこそ！アイカツ！カード管理へ</h2>
         <p class="tutorial-lead">カードの所持管理や検索がかんたんにできる、あなただけのマイバインダーです♪</p>
+        <div id="tutorialStepDots" class="tutorial-dots" role="tablist" aria-label="チュートリアルページ一覧">
+          <button type="button" class="tutorial-dot is-active" data-tutorial-dot="0" aria-label="1ページ目：カードの記録と詳細" aria-current="step"></button>
+          <button type="button" class="tutorial-dot" data-tutorial-dot="1" aria-label="2ページ目：表示モードとコンプ率"></button>
+          <button type="button" class="tutorial-dot" data-tutorial-dot="2" aria-label="3ページ目：検索・絞り込み・並び替え"></button>
+          <button type="button" class="tutorial-dot" data-tutorial-dot="3" aria-label="4ページ目：データ保護とバックアップ"></button>
+        </div>
       </div>
 
-      <div class="tutorial-steps">
-        <section class="tutorial-card tutorial-card--manage">
-          <div class="tutorial-card__head">
-            <span class="tutorial-step-pill tutorial-step-pill--pink">♥ Step 1</span>
-            <h3>カード管理のしかた</h3>
+      <div id="tutorialPages" class="tutorial-pages">
+        <!-- Page 1: カードの登録と詳細表示 -->
+        <section class="tutorial-page is-active" data-tutorial-page="0" aria-labelledby="tutorialPageTitle0">
+          <div class="tutorial-page-banner tutorial-page-banner--pink">
+            <span class="tutorial-step-pill tutorial-step-pill--pink">♥ Step 1 / 4</span>
+            <h3 id="tutorialPageTitle0" class="tutorial-page-heading">カードの枚数登録と拡大チェック</h3>
           </div>
-          <ul class="tutorial-list">
-            <li>カードの <strong>「＋」「−」</strong> や <strong>「未所持 / 所持済」</strong> で枚数を登録できます。</li>
-            <li><strong>「☆」ボタン</strong> を押すとお気に入りに登録できます。</li>
-            <li>カード画像をタップすると<strong>拡大表示・裏面の確認</strong>ができます。</li>
-            <li>上部の <strong>「チェッカー」「バインダー」「通常カラー」</strong> で見た目も切り替えられます。</li>
-          </ul>
+          <div class="tutorial-steps">
+            <div class="tutorial-card tutorial-card--manage">
+              <div class="tutorial-card__head">
+                <h4>1. 持っている枚数とお気に入りを記録しよう</h4>
+              </div>
+              <ul class="tutorial-list">
+                <li>各カード下の <span class="tutorial-kbd">＋</span> <span class="tutorial-kbd">−</span> ボタンで、所持枚数を1枚ずつ増減できます。</li>
+                <li><span class="tutorial-kbd">未所持</span> / <span class="tutorial-kbd">所持済</span> ボタンをタップすると、<strong>0枚と1枚をワンタップで切り替え</strong>られます。</li>
+                <li>カード右上の <span class="tutorial-kbd">☆</span> を押すと <span class="tutorial-kbd">★</span> になり、<strong>お気に入り登録</strong>ができます。</li>
+              </ul>
+            </div>
+
+            <div class="tutorial-card tutorial-card--manage">
+              <div class="tutorial-card__head">
+                <h4>2. カード画像をタップして表・裏を大きく見よう</h4>
+              </div>
+              <ul class="tutorial-list">
+                <li>カード画像をタップすると<strong>詳細モーダル</strong>が開き、カードが大きく表示されます。</li>
+                <li><strong>「裏面を見る ↻」</strong>ボタンでカードを裏返し、コーデ情報やアピールポイントも確認できます。</li>
+                <li><strong>「◀ 前へ」「次へ ▶」</strong>や画像の左右スワイプで、一覧のカードを順番にめくれます。</li>
+              </ul>
+            </div>
+          </div>
         </section>
 
-        <section class="tutorial-card tutorial-card--search">
-          <div class="tutorial-card__head">
-            <span class="tutorial-step-pill tutorial-step-pill--blue">✦ Step 2</span>
-            <h3>検索・絞り込みのしかた</h3>
+        <!-- Page 2: 表示モードとコンプ率 -->
+        <section class="tutorial-page" data-tutorial-page="1" aria-labelledby="tutorialPageTitle1" hidden>
+          <div class="tutorial-page-banner tutorial-page-banner--purple">
+            <span class="tutorial-step-pill tutorial-step-pill--purple">✦ Step 2 / 4</span>
+            <h3 id="tutorialPageTitle1" class="tutorial-page-heading">見た目モードとコンプ率の楽しみ方</h3>
           </div>
-          <ul class="tutorial-list">
-            <li><strong>キーワード欄</strong>にカード名や番号（例: <code>EP-001</code>）を入れてすぐ検索！</li>
-            <li><strong>シリーズ・所持状態（未所持 / ダブり等）・★お気に入り</strong>で絞り込めます。</li>
-            <li><strong>「✦ くわしくさがす」</strong>を開くと、タイプ・レアリティ・ブランドでも探せます。</li>
-            <li>上部の丸いゲージで<strong>全体のコンプ率</strong>と<strong>絞り込み中のコンプ率</strong>がわかります♪</li>
-          </ul>
+          <div class="tutorial-steps">
+            <div class="tutorial-card tutorial-card--purple">
+              <div class="tutorial-card__head">
+                <h4>1. 好みに合わせて3つの表示モードを切り替え</h4>
+              </div>
+              <div class="tutorial-mode-grid">
+                <div class="tutorial-mode-item">
+                  <span class="tutorial-mode-chip tutorial-mode-chip--checker">チェッカー</span>
+                  <p>未所持カードが暗くなり、まだ持っていないカードが一目でわかります（初期設定）。</p>
+                </div>
+                <div class="tutorial-mode-item">
+                  <span class="tutorial-mode-chip tutorial-mode-chip--binder">バインダー</span>
+                  <p>ポケットリフィルにカードをファイリングしたような見た目でコレクションを楽しめます。</p>
+                </div>
+                <div class="tutorial-mode-item">
+                  <span class="tutorial-mode-chip tutorial-mode-chip--color">通常カラー</span>
+                  <p>所持状況にかかわらず、すべてのカードを色鮮やかなフルカラーで表示します。</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="tutorial-card tutorial-card--purple">
+              <div class="tutorial-card__head">
+                <h4>2. 画面上部の2つの丸いコンプ率ゲージ</h4>
+              </div>
+              <ul class="tutorial-list">
+                <li><strong>全体コンプ率（左）</strong>：収録カード全体のうち何種類集まったかと、合計の所持枚数がわかります。</li>
+                <li><strong>絞込コンプ率（右）</strong>：シリーズなどを検索した状態で「その条件の中での達成率」と★お気に入り数を自動計算します♪</li>
+              </ul>
+            </div>
+          </div>
         </section>
 
-        <section class="tutorial-card tutorial-card--warning">
-          <div class="tutorial-card__head">
-            <span class="tutorial-step-pill tutorial-step-pill--warn">⚠ 大切なお知らせ</span>
-            <h3>データが消える場合について</h3>
+        <!-- Page 3: 検索・絞り込み・並び替え -->
+        <section class="tutorial-page" data-tutorial-page="2" aria-labelledby="tutorialPageTitle2" hidden>
+          <div class="tutorial-page-banner tutorial-page-banner--blue">
+            <span class="tutorial-step-pill tutorial-step-pill--blue">✦ Step 3 / 4</span>
+            <h3 id="tutorialPageTitle2" class="tutorial-page-heading">ほしいカードをすばやく探そう</h3>
           </div>
-          <p class="tutorial-warn-text">
-            登録したカード枚数やお気に入りは、<strong>お使いのブラウザ内（ローカル）</strong>に保存されます。<br>
-            <strong>サイト履歴の削除・キャッシュクリア・閲覧データの消去</strong>を行うと、<strong>登録したカードデータもすべて消えてしまいます！</strong>
-          </p>
-          <p class="tutorial-warn-tip">
-            ✦ 機種変更やブラウザ整理の前に、画面上部の<strong>「保存」</strong>や<strong>「データ管理」</strong>からバックアップファイルを保存しておくのがおすすめです。
-          </p>
+          <div class="tutorial-steps">
+            <div class="tutorial-card tutorial-card--search">
+              <div class="tutorial-card__head">
+                <h4>1. キーワードと基本の絞り込み</h4>
+              </div>
+              <ul class="tutorial-list">
+                <li><strong>キーワード欄</strong>にカード名や番号（例: <code>EP-001</code>）を入れると、入力しながらすぐ検索できます。</li>
+                <li><strong>シリーズ</strong>や<strong>所持状態</strong>（<code>所持のみ</code> / <code>未所持のみ</code> / <code>ダブり 2枚〜</code>）で必要なカードだけを表示！</li>
+                <li><strong>「★ お気に入り」</strong>にチェックを入れると、お気に入りカードだけをまとめて見返せます。</li>
+              </ul>
+            </div>
+
+            <div class="tutorial-card tutorial-card--search">
+              <div class="tutorial-card__head">
+                <h4>2. くわしい条件検索と並び替え</h4>
+              </div>
+              <ul class="tutorial-list">
+                <li><strong>「✦ くわしくさがす」</strong>を開くと、<strong>タイプ・レアリティ・カテゴリ・ブランド</strong>で細かく絞り込めます。</li>
+                <li>一覧右上の<strong>「ならびかえ」</strong>で、カード番号順・レアリティ順・持っている枚数順に並び替えられます。</li>
+                <li>探し終わったら<strong>「条件クリア」</strong>を押すと、すべての検索条件をワンタップで戻せます。</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Page 4: データ保護とバックアップ・カード更新 -->
+        <section class="tutorial-page" data-tutorial-page="3" aria-labelledby="tutorialPageTitle3" hidden>
+          <div class="tutorial-page-banner tutorial-page-banner--warn">
+            <span class="tutorial-step-pill tutorial-step-pill--warn">⚠ Step 4 / 4</span>
+            <h3 id="tutorialPageTitle3" class="tutorial-page-heading">大切なお知らせ（データ保存と更新）</h3>
+          </div>
+          <div class="tutorial-steps">
+            <div class="tutorial-card tutorial-card--warning">
+              <div class="tutorial-card__head">
+                <h4>1. データが消えてしまう場合について</h4>
+              </div>
+              <p class="tutorial-warn-text">
+                登録したカード枚数やお気に入りは、<strong>お使いのブラウザ内（ローカル）</strong>に保存されます。<br>
+                <strong>サイト履歴の削除・キャッシュクリア・閲覧データの消去</strong>を行うと、<strong>登録したカードデータもすべて消えてしまいます！</strong>
+              </p>
+              <p class="tutorial-warn-tip">
+                ※ シークレット（プライベート）モードでは、ブラウザを閉じると記録が残りませんのでご注意ください。
+              </p>
+            </div>
+
+            <div class="tutorial-card tutorial-card--safe">
+              <div class="tutorial-card__head">
+                <h4>2. バックアップ（保存・復元）と最新カード更新</h4>
+              </div>
+              <ul class="tutorial-list">
+                <li>画面上部の<strong>「保存」</strong>からいつでもファイル保存でき、<strong>「復元」</strong>から元の状態に戻せます。</li>
+                <li>機種変更やメモ帳への文字コピーでの引き継ぎ・全リセットは<strong>「データ管理」</strong>から行えます。</li>
+                <li>新しい弾やプロモカードが増えたときは、画面上部の<strong>「カード更新」</strong>で最新リストを取得できます。</li>
+              </ul>
+            </div>
+          </div>
         </section>
       </div>
 
       <div class="tutorial-footer">
-        <label class="tutorial-reopen-check">
-          <input type="checkbox" id="chkTutorialHideNext">
-          <span class="tutorial-reopen-check__box" aria-hidden="true"></span>
-          <span class="tutorial-reopen-check__label">次回チュートリアルを表示しない</span>
-        </label>
-        <div class="tutorial-footer-actions">
-          <span class="tutorial-hint">※ いつでも右上の「？」ボタンから見返せます</span>
-          <button type="button" id="btnStartFromTutorial" class="btn btn-primary tutorial-start-btn">♥ わかった！はじめる</button>
+        <div class="tutorial-footer-top">
+          <label class="tutorial-reopen-check">
+            <input type="checkbox" id="chkTutorialHideNext">
+            <span class="tutorial-reopen-check__box" aria-hidden="true"></span>
+            <span class="tutorial-reopen-check__label">次回から起動時に自動で表示しない</span>
+          </label>
+          <span class="tutorial-hint">※ いつでも右上の「？」から見返せます</span>
+        </div>
+        <div class="tutorial-nav-row">
+          <button type="button" id="btnTutorialPrev" class="btn btn-outline tutorial-nav-btn tutorial-nav-btn--prev" disabled>◀ 戻る</button>
+          <div class="tutorial-nav-next-group">
+            <button type="button" id="btnTutorialNext" class="btn btn-primary tutorial-nav-btn tutorial-nav-btn--next">次へ ▶</button>
+            <button type="button" id="btnStartFromTutorial" class="btn btn-primary tutorial-start-btn" hidden>♥ わかった！はじめる</button>
+          </div>
         </div>
       </div>
     </div>
