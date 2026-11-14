@@ -229,9 +229,6 @@
               <h3 class="card-title js-open-modal" itemprop="name">${nameEsc}</h3>
               <p class="card-subinfo" itemprop="description">${brandEsc} / ${catEsc}</p>
               <div class="card-footer">
-                <button type="button" class="btn btn-outline btn-xs js-btn-toggle-own">
-                  ${isOwned ? '所持済' : '未所持'}
-                </button>
                 <div class="counter-control">
                   <button type="button" class="btn-counter js-btn-dec" aria-label="1枚減らす">−</button>
                   <span class="counter-value">${count}</span>

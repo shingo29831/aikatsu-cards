@@ -374,28 +374,35 @@
   padding-top: 8px;
   border-top: 1px solid #f2e8f0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
 .counter-control {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: #f8f2f6;
-  padding: 2px 6px;
+  padding: 4px 10px;
   border-radius: 999px;
 }
 
 .btn-counter {
-  width: 26px;
-  height: 26px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid var(--border-color);
   background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
   font-weight: 800;
+  line-height: 1;
   cursor: pointer;
   color: var(--text-main);
+  touch-action: manipulation;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 
 .btn-counter:hover {
@@ -403,11 +410,49 @@
   border-color: var(--pink-primary);
 }
 
+.btn-counter:active {
+  transform: scale(0.94);
+}
+
 .counter-value {
-  min-width: 22px;
+  min-width: 26px;
   text-align: center;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 1rem;
+}
+
+.card-grid.is-binder-view .card-footer .counter-control {
+  gap: 6px;
+  padding: 3px 6px;
+}
+
+.card-grid.is-binder-view .card-footer .btn-counter {
+  width: 30px;
+  height: 30px;
+  font-size: 0.98rem;
+}
+
+.card-grid.is-binder-view .card-footer .counter-value {
+  min-width: 22px;
+  font-size: 0.94rem;
+}
+
+@media (max-width: 768px) {
+  .card-footer .counter-control {
+    gap: 6px;
+    padding: 3px 6px;
+  }
+
+  .card-footer .btn-counter {
+    width: 30px;
+    height: 30px;
+    font-size: 0.98rem;
+  }
+
+  .card-footer .counter-value {
+    min-width: 22px;
+    font-size: 0.94rem;
+  }
 }
 
 .empty-state {
