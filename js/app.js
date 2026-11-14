@@ -272,7 +272,30 @@
         }
       });
 
+      this._bindResponsiveSelectLabels();
       modalController.bindModalEvents(this);
+    }
+
+    _bindResponsiveSelectLabels() {
+      if (
+        !this.el.filterOwnership ||
+        typeof uiRenderer.syncResponsiveSelectLabels !== 'function' ||
+        typeof window === 'undefined' ||
+        typeof window.matchMedia !== 'function'
+      ) {
+        return;
+      }
+      // ネイティブselectのoptionにはCSSのdisplay:noneが効かないためJSで文言を切り替える
+      const mediaQuery = window.matchMedia('(max-width: 768px)');
+      const applyLabels = () => {
+        uiRenderer.syncResponsiveSelectLabels(this.el.filterOwnership, mediaQuery.matches);
+      };
+      applyLabels();
+      if (typeof mediaQuery.addEventListener === 'function') {
+        mediaQuery.addEventListener('change', applyLabels);
+      } else if (typeof mediaQuery.addListener === 'function') {
+        mediaQuery.addListener(applyLabels);
+      }
     }
 
     _handleUserStateFileImport(e) {

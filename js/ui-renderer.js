@@ -131,6 +131,21 @@
   }
 
   /**
+   * data-label-full / data-label-short 属性を持つoptionの表示文言を画面幅に応じて切り替える
+   * @param {HTMLSelectElement|null} selectEl
+   * @param {boolean} isCompact
+   */
+  function syncResponsiveSelectLabels(selectEl, isCompact) {
+    if (!selectEl || !selectEl.options) return;
+    Array.from(selectEl.options).forEach((opt) => {
+      const targetLabel = isCompact ? opt.dataset.labelShort : opt.dataset.labelFull;
+      if (targetLabel && opt.textContent !== targetLabel) {
+        opt.textContent = targetLabel;
+      }
+    });
+  }
+
+  /**
    * 表示モード（checker / binder / color）のCSSクラスとボタン選択状態を反映する
    * @param {Element} gridEl
    * @param {NodeList|Array<Element>} modeButtons
@@ -331,6 +346,7 @@
     updateGaugeProgress,
     renderStatsDashboard,
     populateSeriesSelect,
+    syncResponsiveSelectLabels,
     applyDisplayModeUI,
     renderCardGrid,
     updateSeoMetadata
